@@ -1,2 +1,5 @@
 # small-spot
-A mini player for Spotify.
+A small player for Spotify.
+
+`npm install
+`npm install bootstrap

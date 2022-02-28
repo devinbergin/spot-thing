@@ -7818,5 +7818,8 @@ textarea.form-control-lg {
 /**********************************************************
 *   small-spot
 ***********************************************************/
-body {
+.small-spot body {
   background-color: #6138f5; }
+
+.small-spot .albumArt {
+  max-width: 200px; }

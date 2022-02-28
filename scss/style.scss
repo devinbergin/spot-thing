@@ -2,8 +2,17 @@
 *   small-spot
 ***********************************************************/
 
-body {
-	background-color: $purple;
+.small-spot {
+	
+	body {
+		background-color: $purple;
+	}
+
+	.albumArt {
+		max-width:200px;
+	}
+	
 }
+
 
 

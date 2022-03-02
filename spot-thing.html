@@ -6,7 +6,7 @@
     	<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">-->
 
 		<!-- Font Awesome -->
-		<script defer src="node_modules/@fontawesome/js/all.js"></script>
+		<script src="https://kit.fontawesome.com/6efe8fbb30.js" crossorigin="anonymous"></script>
 
 		<!-- CSS -->
     	<link href="css/spot-thing.css" rel="stylesheet">
@@ -15,47 +15,47 @@
   	</head>
   
   	<body class="spot-thing">
-		<div class="container-fluid">
-			<div class="card mb-3">
-				<div class="row">
-					<div class="col-5">
+		<div class="container-fluid h-100">
+			<div class="mb-3">
+				<div class="row info">
+					<div class="col-4 p-4">
 						<img src="images/TheIncredibleTrueStory.jpg" class="albumArt card-img" alt="Album Art">
 					</div>
 					<div class="col-auto my-auto" align="left">
 						<div class="row">
-							<div class="col-12">
+							<div class="col-12 albumName">
+								The Incredible True Story
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12 songName">
 								Fade Away
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-12">
+							<div class="col-12 artistName">
 								Logic
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-12">
-								<small class="text-muted">The Incredible True Story</small>
-							</div>
-						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-12">
-						----
+				<div class="row progressContainer">
+					<div class="progress">
+						<div class="progress-bar" role="progressbar" style="width:35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-3">
-						Shuffle
+				<div class="row controls">
+					<div class="col-3 my-auto" align="center">
+						<i class="fa-solid fa-shuffle"></i>
 					</div>
-					<div class="col-3">
-						Back
+					<div class="col-3 my-auto" align="center">
+						<i class="fa-solid fa-backward-step"></i>
 					</div>
-					<div class="col-3">
-						Play
+					<div class="col-3 my-auto" align="center">
+						<i class="fa-solid fa-pause"></i>
 					</div>
-					<div class="col-3">
-						Forward
+					<div class="col-3 my-auto" align="center">
+						<i class="fa-solid fa-forward-step"></i>
 					</div>
 				</div>
 			</div>

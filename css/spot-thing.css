@@ -7815,11 +7815,93 @@ textarea.form-control-lg {
 /**********************************************************
 *   @COLORS
 ***********************************************************/
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-Thin.ttf");
+  font-weight: 100;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-ExtraLight.ttf");
+  font-weight: 200;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-Light.ttf");
+  font-weight: 300;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-Regular.ttf");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-Medium.ttf");
+  font-weight: 500;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-Bold.ttf");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-ExtraBold.ttf");
+  font-weight: 800;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../fonts/Montserrat-Black.ttf");
+  font-weight: 900;
+  font-style: normal; }
+
 /**********************************************************
 *   spot-thing
 ***********************************************************/
-.spot-thing body {
-  background-color: #6138f5; }
-
-.spot-thing .albumArt {
-  max-width: 200px; }
+.spot-thing {
+  font-family: 'Montserrat';
+  font-weight: 400;
+  height: 100vh; }
+  .spot-thing .info {
+    background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%); }
+    .spot-thing .info .albumArt {
+      max-width: 175px;
+      box-shadow: 0 1px 3px 0 rgba(35, 35, 35, 0.1), 0 1px 2px -1px rgba(35, 35, 35, 0.1); }
+    .spot-thing .info .albumName {
+      font-size: 14px;
+      color: #d5cafc; }
+    .spot-thing .info .artistName {
+      font-size: 18px;
+      color: #FFFFFF; }
+    .spot-thing .info .songName {
+      font-size: 36px;
+      font-weight: 900;
+      color: #FFFFFF; }
+  .spot-thing .progressContainer {
+    height: 5px; }
+    .spot-thing .progressContainer .progress {
+      height: 5px;
+      border-radius: 0px;
+      background-color: #3d0cee; }
+    .spot-thing .progressContainer .progress-bar {
+      background-color: #FFFFFF;
+      margin-left: -12px; }
+  .spot-thing .controls {
+    background: #6138f5;
+    height: 107px;
+    font-size: 28px;
+    color: #FFFFFF; }

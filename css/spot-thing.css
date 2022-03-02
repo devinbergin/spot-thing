@@ -7816,10 +7816,10 @@ textarea.form-control-lg {
 *   @COLORS
 ***********************************************************/
 /**********************************************************
-*   small-spot
+*   spot-thing
 ***********************************************************/
-.small-spot body {
+.spot-thing body {
   background-color: #6138f5; }
 
-.small-spot .albumArt {
+.spot-thing .albumArt {
   max-width: 200px; }

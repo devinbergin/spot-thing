@@ -1,5 +1,5 @@
 {
-  "name": "small-spot",
+  "name": "spot-thing",
   "version": "1.0.0",
   "description": "A small spotify player.",
   "main": "main.js",
@@ -9,7 +9,7 @@
     "scss": "node-sass --watch scss -o css",
     "build-css": "node-sass scss/chart.scss css/chart.css --output-style compressed"
   },
-  "repository": "https://github.com/devinbergin/small-spot",
+  "repository": "https://github.com/devinbergin/spot-thing",
   "author": "Devin Bergin",
   "license": "CC0-1.0",
   "devDependencies": {

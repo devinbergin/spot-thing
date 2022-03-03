@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		spotifyApi = new SpotifyWebApi(credentials);
 		
 		// The code that's returned as a query parameter to the redirect URI
-		var code = 'AQA5fOEleCFLHV6CUCl_dFLP7MghpNVl6YHfzpmmj8VpKwynYDlrYZdRumjXOoFvAsqRs30S9RVVZG3Ee71-gyovGrkLyZoV2NmPVRf9gvLVRM1UZl8ZJk4Z4MatwuGqw6ooRE3U5AeM03QxSogFb8U6vZdP2dXFEbZJl-qP9Vdy_Oasw9hVUjeXfr9uGoHRGgm7oC3Qzu_qlTGFyLsT8syjd_QTRD272gADMicTpdf9vPzMKuG4Vk0_nD1-wAvuoUZpnp1hxhbnNtCp0Ab4jnzi6ubNTx69Nkld70vN3kuox06RWSRHNMdHDBObtXbR9ds';
+		var code = 'AQAmE2MMf8Mp2SAA5dUkcbwYuP1PlHms583tKj6rKXvh4SO9FqrfKFtBlqJkcBKh6vfnL_lNaMlFaJXFirPL6pRONtXi4Spb33g8InD0tUqI2XwwrRKGmWVdb1VvDTlpefgBaAFB3AclDaj0akKMeb-rZdHEqsXdTo7MXhJMN2XldXn52SaW6M4gpvWp6oO2TRN00q8yRIsyBHW-4O76wGo9IdyyAH7_Z9LJSZnXMUs9enIzxbTykdH9s0vffRaODG66Y-JW3fnVFDEln6-BilzJ0WqkygdbzXA00m006miZgI_HvAxONNW9nfadbhcafmo';
 	
 		// Retrieve an access token and a refresh token
 		spotifyApi.authorizationCodeGrant(code).then(
@@ -93,7 +93,6 @@ window.addEventListener('DOMContentLoaded', () => {
 				console.log('Now playing album: ' + data.body.item.album.name);
 				console.log('Now playing image: ' + data.body.item.album.images[0].url);
 				//console.log('Now playing: ' + JSON.stringify(data.body));
-				//console.log('Now playing: ' + JSON.stringify(data));
 				$('#songName').text(data.body.item.name);
 				$('#artistName').text(data.body.item.artists[0].name);
 				$('#albumName').text(data.body.item.album.name);
@@ -105,15 +104,31 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	// TODO - this only turns shuffle on, need to toggle on/off
+	// Toggle the shuffle state
 	$("#shuffle").click(function() {
-		spotifyApi.setShuffle(true)
-		.then(function() {
-			console.log('Shuffle is on.');
-		}, function  (err) {
-			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
-			console.log('Something went wrong!', err);
-		});
+		if ($('#shuffle').hasClass('shuffleInactive')) {
+		
+			spotifyApi.setShuffle(true)
+			.then(function() {
+				console.log('Shuffle is on.');
+				$('#shuffle').addClass('shuffleActive');
+				$('#shuffle').removeClass('shuffleInactive');
+			}, function  (err) {
+				//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+				console.log('Something went wrong!', err);
+			});
+
+		} else {
+			spotifyApi.setShuffle(false)
+			.then(function() {
+				console.log('Shuffle is off.');
+				$('#shuffle').removeClass('shuffleActive');
+				$('#shuffle').addClass('shuffleInactive');
+			}, function  (err) {
+				//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+				console.log('Something went wrong!', err);
+			});
+		}
 	});
 
 	$("body").on("click", "#pause", function(){
@@ -128,7 +143,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	// TODO - this doesn't work when it's switched in after clicking pause
 	$("body").on("click", "#play", function(){
 		// Start/Resume a User's Playback 
 		spotifyApi.play()
@@ -142,6 +156,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 
 	// TODO: when you click next, get the currently playing info and update it in the UI
+	// TODO: when you click next if we are paused we need to update the play icon so the user can pause since moving to the next song auto plays
 	$("#nextSong").click(function() {
 		// Skip User’s Playback To Next Track
 		spotifyApi.skipToNext()
@@ -153,6 +168,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
+	// TODO: when you click back, get the currently playing info and update it in the UI
+	// TODO: when you click back if we are paused we need to update the play icon so the user can pause since moving to the back song auto plays
 	$("#backSong").click(function() {
 		// Skip User’s Playback To Previous Track 
 		spotifyApi.skipToPrevious()

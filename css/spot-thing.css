@@ -7879,11 +7879,11 @@ textarea.form-control-lg {
   overflow-y: hidden; }
   .spot-thing .info {
     background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%); }
+    .spot-thing .info .albumArt {
+      max-width: 130px;
+      box-shadow: 0 1px 5px 0 rgba(35, 35, 35, 0.6), 0 1px 4px -1px rgba(35, 35, 35, 0.6); }
     .spot-thing .info .songContainer {
       max-width: 325px; }
-      .spot-thing .info .songContainer .albumArt {
-        max-width: 175px;
-        box-shadow: 0 1px 3px 0 rgba(35, 35, 35, 0.1), 0 1px 2px -1px rgba(35, 35, 35, 0.1); }
       .spot-thing .info .songContainer .albumName {
         font-size: 14px;
         color: #d5cafc;
@@ -7928,3 +7928,19 @@ textarea.form-control-lg {
     height: 110px;
     font-size: 28px;
     color: #FFFFFF; }
+    .spot-thing .controls .nextSong {
+      opacity: .7; }
+      .spot-thing .controls .nextSong:hover {
+        opacity: 1; }
+    .spot-thing .controls .backSong {
+      opacity: .7; }
+      .spot-thing .controls .backSong:hover {
+        opacity: 1; }
+    .spot-thing .controls .shuffleActive {
+      opacity: 1;
+      color: #1DB954; }
+    .spot-thing .controls .shuffleInactive {
+      opacity: .7;
+      color: #FFFFFF; }
+      .spot-thing .controls .shuffleInactive:hover {
+        opacity: 1; }

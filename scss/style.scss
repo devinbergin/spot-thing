@@ -12,13 +12,13 @@
 	.info {
 		background: $purple-gradient;
 
+		.albumArt {
+			max-width:130px;
+			box-shadow: 0 1px 5px 0 rgba($black, .6), 0 1px 4px -1px rgba($black, .6);
+		}
+
 		.songContainer {
 			max-width:325px;
-		
-			.albumArt {
-				max-width:175px;
-				box-shadow: 0 1px 3px 0 rgba($black, .1), 0 1px 2px -1px rgba($black, .1);
-			}
 		
 			.albumName {
 				font-size:14px;
@@ -80,6 +80,36 @@
 		height:110px;
 		font-size:28px;
 		color:$white;
+
+		.nextSong {
+			opacity:.7;
+
+			&:hover {
+				opacity:1;
+			}
+		}
+
+		.backSong {
+			opacity:.7;
+
+			&:hover {
+				opacity:1;
+			}
+		}
+
+		.shuffleActive {
+			opacity:1;
+			color:$spotifygreen;
+		}
+
+		.shuffleInactive {
+			opacity:.7;
+			color:$white;
+
+			&:hover {
+				opacity:1;
+			}
+		}
 	}
 
 	

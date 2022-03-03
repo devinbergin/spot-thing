@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		spotifyApi = new SpotifyWebApi(credentials);
 		
 		// The code that's returned as a query parameter to the redirect URI
-		var code = 'AQAmE2MMf8Mp2SAA5dUkcbwYuP1PlHms583tKj6rKXvh4SO9FqrfKFtBlqJkcBKh6vfnL_lNaMlFaJXFirPL6pRONtXi4Spb33g8InD0tUqI2XwwrRKGmWVdb1VvDTlpefgBaAFB3AclDaj0akKMeb-rZdHEqsXdTo7MXhJMN2XldXn52SaW6M4gpvWp6oO2TRN00q8yRIsyBHW-4O76wGo9IdyyAH7_Z9LJSZnXMUs9enIzxbTykdH9s0vffRaODG66Y-JW3fnVFDEln6-BilzJ0WqkygdbzXA00m006miZgI_HvAxONNW9nfadbhcafmo';
+		var code = 'AQCyD7NNf_Coy_wxu1x_KXrmfN4hw1PcxfocHcmA8jCQcFpEfpByXPlSHXgyRvngzM-dzscosF1B9qbGX7NbkY79BenBG9PlBAPLWsLpQDqg13wWfSNV9_dgy6XECBNFkk0p4g0w4nFjKMiJ9-bA9Zkq4P8CPxAYstbhjaK6TvOB2HI48BUAC8qzcPxkh2BoHK2SfZtHtnW19rel9UWzmWiYxJmui-bgjm09TP-cSSljaMgd6iSlIX7nB3T526G1Vg6oM-OkvefAk59O7Q27mGk4FRV_g5ND8k_qTnGN8Ts4SO_d5AKFLs5pCF7OrYHYXIo';
 	
 		// Retrieve an access token and a refresh token
 		spotifyApi.authorizationCodeGrant(code).then(
@@ -83,8 +83,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		);
 	});
 	
-	// TODO - find a better way to refresh info
-	$("#albumArt").click(function() {
+	// This refreshes currently playing every 1 second until you click the album artwork (temporary)
+	var intervalId = window.setInterval(function(){
 		// Get the User's Currently Playing Track 
 		spotifyApi.getMyCurrentPlayingTrack()
 			.then(function(data) {
@@ -92,16 +92,26 @@ window.addEventListener('DOMContentLoaded', () => {
 				console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
 				console.log('Now playing album: ' + data.body.item.album.name);
 				console.log('Now playing image: ' + data.body.item.album.images[0].url);
+				console.log('Now playing song progress ms: ' + data.body.progress_ms);
+				console.log('Now playing song duration ms: ' + data.body.item.duration_ms);
 				//console.log('Now playing: ' + JSON.stringify(data.body));
+
+				var percentComplete = (data.body.progress_ms/data.body.item.duration_ms)*100;
+				percentComplete = percentComplete.toFixed(0);
+
 				$('#songName').text(data.body.item.name);
 				$('#artistName').text(data.body.item.artists[0].name);
 				$('#albumName').text(data.body.item.album.name);
 				$('#albumArt').attr('src',data.body.item.album.images[0].url);
-
+				$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
 
 			}, function(err) {
 				console.log('Something went wrong!', err);
 		});
+	  }, 1000);
+
+	$("#albumArt").click(function() {
+		clearInterval(intervalId) 
 	});
 
 	// Toggle the shuffle state

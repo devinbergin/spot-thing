@@ -7878,19 +7878,41 @@ textarea.form-control-lg {
   height: 100vh; }
   .spot-thing .info {
     background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%); }
-    .spot-thing .info .albumArt {
-      max-width: 175px;
-      box-shadow: 0 1px 3px 0 rgba(35, 35, 35, 0.1), 0 1px 2px -1px rgba(35, 35, 35, 0.1); }
-    .spot-thing .info .albumName {
-      font-size: 14px;
-      color: #d5cafc; }
-    .spot-thing .info .artistName {
-      font-size: 18px;
-      color: #FFFFFF; }
-    .spot-thing .info .songName {
-      font-size: 36px;
-      font-weight: 900;
-      color: #FFFFFF; }
+    .spot-thing .info .songContainer {
+      max-width: 325px; }
+      .spot-thing .info .songContainer .albumArt {
+        max-width: 175px;
+        box-shadow: 0 1px 3px 0 rgba(35, 35, 35, 0.1), 0 1px 2px -1px rgba(35, 35, 35, 0.1); }
+      .spot-thing .info .songContainer .albumName {
+        font-size: 14px;
+        color: #d5cafc;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        max-width: 215px; }
+      .spot-thing .info .songContainer .artistName {
+        font-size: 18px;
+        color: #FFFFFF;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        max-width: 320px; }
+      .spot-thing .info .songContainer .songName {
+        font-size: 34px;
+        font-weight: 900;
+        color: #FFFFFF;
+        max-height: 100px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden; }
+      .spot-thing .info .songContainer .logo {
+        width: 75px;
+        top: 10px;
+        right: 10px;
+        position: absolute; }
   .spot-thing .progressContainer {
     height: 5px; }
     .spot-thing .progressContainer .progress {
@@ -7902,6 +7924,6 @@ textarea.form-control-lg {
       margin-left: -12px; }
   .spot-thing .controls {
     background: #6138f5;
-    height: 107px;
+    height: 108px;
     font-size: 28px;
     color: #FFFFFF; }

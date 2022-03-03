@@ -3,22 +3,26 @@ const {app, BrowserWindow} = require('electron')
 const path = require('path')
 
 function createWindow () {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 550,
-    height: 325,
-    autoHideMenuBar: true,
-    //frame: false,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+  	// Create the browser window.
+  	const mainWindow = new BrowserWindow({
+		width: 550,
+		height: 325,
+		resizeable: false,
+		autoHideMenuBar: true,
+		//frame: false,
+		webPreferences: {
+      		preload: path.join(__dirname, 'preload.js')
+    	}
+  	})
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('spot-thing.html')
+  	// and load the index.html of the app.
+  	mainWindow.loadFile('spot-thing.html')
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  	// Open the DevTools.
+  	mainWindow.webContents.openDevTools()
+  
+	// Don't allow drag to resize window
+  	mainWindow.setResizable(false)
 }
 
 // This method will be called when Electron has finished

@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		spotifyApi = new SpotifyWebApi(credentials);
 		
 		// The code that's returned as a query parameter to the redirect URI
-		var code = 'AQChkaJadryxNhx6ETIqjCQtMzEeSmYhAFWUNDysSKjjxX2XMOeNMh7FKoL4q12c58vaNDqw4Bs8PlmpqY2p0EyqaDGlu4kbuK6txpSUUF14t1VqXMThmTMm7d131qdW8t46mY80ZsGmJwXAoK6DpJY-cPB9GL6FIuSWM7hwAwggzty_iGon4Hsv3oP9ErY_6ZrBQ1cO1nP3A9axNCKPtVl0kBN6WV_vcdN8XxuA-dOFlctJshHgYHlV9jkX9fVr7DwrsROFLLQ10uwDrq3TDgmrhCJ4ahGXEOMPTVwdgUu4wSdHGWEIhmrfouhONSDW7f0';
+		var code = 'AQA5fOEleCFLHV6CUCl_dFLP7MghpNVl6YHfzpmmj8VpKwynYDlrYZdRumjXOoFvAsqRs30S9RVVZG3Ee71-gyovGrkLyZoV2NmPVRf9gvLVRM1UZl8ZJk4Z4MatwuGqw6ooRE3U5AeM03QxSogFb8U6vZdP2dXFEbZJl-qP9Vdy_Oasw9hVUjeXfr9uGoHRGgm7oC3Qzu_qlTGFyLsT8syjd_QTRD272gADMicTpdf9vPzMKuG4Vk0_nD1-wAvuoUZpnp1hxhbnNtCp0Ab4jnzi6ubNTx69Nkld70vN3kuox06RWSRHNMdHDBObtXbR9ds';
 	
 		// Retrieve an access token and a refresh token
 		spotifyApi.authorizationCodeGrant(code).then(
@@ -68,7 +68,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 
 	// Need to move thise somewhere else.. might also need to dynamically do it whenever the app gets a response back that the token has expired
-	$("#shuffle").click(function() {
+	$("#xyz").click(function() {
 		// clientId, clientSecret and refreshToken has been set on the api object previous to this call.
 		spotifyApi.refreshAccessToken().then(
 			function(data) {
@@ -83,19 +83,65 @@ window.addEventListener('DOMContentLoaded', () => {
 		);
 	});
 	
-	// TODO switch this over to actually pausing the song
-	$("#pause").click(function() {
+	// TODO - find a better way to refresh info
+	$("#albumArt").click(function() {
 		// Get the User's Currently Playing Track 
 		spotifyApi.getMyCurrentPlayingTrack()
 			.then(function(data) {
-				console.log('Now playing: ' + data.body.item.name);
+				console.log('Now playing track: ' + data.body.item.name);
+				console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
+				console.log('Now playing album: ' + data.body.item.album.name);
+				console.log('Now playing image: ' + data.body.item.album.images[0].url);
+				//console.log('Now playing: ' + JSON.stringify(data.body));
+				//console.log('Now playing: ' + JSON.stringify(data));
+				$('#songName').text(data.body.item.name);
+				$('#artistName').text(data.body.item.artists[0].name);
+				$('#albumName').text(data.body.item.album.name);
+				$('#albumArt').attr('src',data.body.item.album.images[0].url);
+
+
 			}, function(err) {
 				console.log('Something went wrong!', err);
 		});
 	});
 
-	// TODO: when you click next, get the currently playing info and update it in the UI -- currently it's 1 song behind
-	// Skip to the next track
+	// TODO - this only turns shuffle on, need to toggle on/off
+	$("#shuffle").click(function() {
+		spotifyApi.setShuffle(true)
+		.then(function() {
+			console.log('Shuffle is on.');
+		}, function  (err) {
+			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			console.log('Something went wrong!', err);
+		});
+	});
+
+	$("body").on("click", "#pause", function(){
+		// Pause the User's Playback 
+		spotifyApi.pause()
+		.then(function() {
+			console.log('Playback paused');
+			$('#playPause').html('<i class="fa-solid fa-play" id="play"></i>');
+		}, function(err) {
+			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			console.log('Something went wrong!', err);
+		});
+	});
+
+	// TODO - this doesn't work when it's switched in after clicking pause
+	$("body").on("click", "#play", function(){
+		// Start/Resume a User's Playback 
+		spotifyApi.play()
+		.then(function() {
+			console.log('Playback started');
+			$('#playPause').html('<i class="fa-solid fa-pause" id="pause"></i>');
+		}, function(err) {
+			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			console.log('Something went wrong!', err);
+		});
+	});
+
+	// TODO: when you click next, get the currently playing info and update it in the UI
 	$("#nextSong").click(function() {
 		// Skip User’s Playback To Next Track
 		spotifyApi.skipToNext()
@@ -105,19 +151,19 @@ window.addEventListener('DOMContentLoaded', () => {
 			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 			console.log('Something went wrong!', err);
 		});
+	});
 
-		// Get the User's Currently Playing Track 
-		spotifyApi.getMyCurrentPlayingTrack()
-		.then(function(data) {
-			console.log('Now playing: ' + data.body.item.name);
-			// Set the track name in the UI
-			$('#songName').text(data.body.item.name);
+	$("#backSong").click(function() {
+		// Skip User’s Playback To Previous Track 
+		spotifyApi.skipToPrevious()
+		.then(function() {
+			console.log('Skip to previous');
 		}, function(err) {
+			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 			console.log('Something went wrong!', err);
-			$('#songName').text('Error');
 		});
 	});
 	
-
+	
   
 })

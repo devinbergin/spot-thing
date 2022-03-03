@@ -31,7 +31,8 @@ window.addEventListener('DOMContentLoaded', () => {
 	// 1. Open the app and get this URL from console.
 	// 2. visit the url in browser and copy the code only into the code var below inside spotLogo func	
 	// 3. Refresh the app ctrl+shift+r click the spot logo
-	// 4. USE THE APP BABY
+	// 4. Click the spotify logo
+	// 5. USE THE APP BABY
 	console.log(authorizeURL);
 
 	var credentials = {
@@ -47,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		spotifyApi = new SpotifyWebApi(credentials);
 		
 		// The code that's returned as a query parameter to the redirect URI
-		var code = 'AQAjqAhwfXNJUjBPxL2tJifZlcBnw3VHkfAWo0aUglDHYMA6C0rOjxcX899A22-I03bjnT3Wle2ZM8amroJlA6VU6ISVut4N0TvcRxmkXtfzSIKQWiOToxImIZzd-9Utnf-ulr8dWgvloEF2Z-l9_xuENY2SGKTk2yzkcGTrv3tapNq1jQSs4-qaoyhM8lW7A4Xgbla_Zzm57WbLD4Uy-2k2r80EuXBfaR-qr6fInlohlbIUKOi_lpFHlgs32j3SiQpt9J6m1KtmfGoLiD9ncSu0GnJLMRkirL2FrzqfyDLmn8xJ3U-5f7zVsz4S7EZO3uY';
+		var code = 'AQChkaJadryxNhx6ETIqjCQtMzEeSmYhAFWUNDysSKjjxX2XMOeNMh7FKoL4q12c58vaNDqw4Bs8PlmpqY2p0EyqaDGlu4kbuK6txpSUUF14t1VqXMThmTMm7d131qdW8t46mY80ZsGmJwXAoK6DpJY-cPB9GL6FIuSWM7hwAwggzty_iGon4Hsv3oP9ErY_6ZrBQ1cO1nP3A9axNCKPtVl0kBN6WV_vcdN8XxuA-dOFlctJshHgYHlV9jkX9fVr7DwrsROFLLQ10uwDrq3TDgmrhCJ4ahGXEOMPTVwdgUu4wSdHGWEIhmrfouhONSDW7f0';
 	
 		// Retrieve an access token and a refresh token
 		spotifyApi.authorizationCodeGrant(code).then(
@@ -93,17 +94,28 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	// TODO: when you click next, get the currently playing info and update it in the UI
+	// TODO: when you click next, get the currently playing info and update it in the UI -- currently it's 1 song behind
 	// Skip to the next track
 	$("#nextSong").click(function() {
 		// Skip User’s Playback To Next Track
 		spotifyApi.skipToNext()
-			.then(function() {
-				console.log('Skip to next');
-			}, function(err) {
-				//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
-				console.log('Something went wrong!', err);
-			});
+		.then(function() {
+			console.log('Skip to next');
+		}, function(err) {
+			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			console.log('Something went wrong!', err);
+		});
+
+		// Get the User's Currently Playing Track 
+		spotifyApi.getMyCurrentPlayingTrack()
+		.then(function(data) {
+			console.log('Now playing: ' + data.body.item.name);
+			// Set the track name in the UI
+			$('#songName').text(data.body.item.name);
+		}, function(err) {
+			console.log('Something went wrong!', err);
+			$('#songName').text('Error');
+		});
 	});
 	
 

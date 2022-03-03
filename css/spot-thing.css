@@ -7875,7 +7875,8 @@ textarea.form-control-lg {
 .spot-thing {
   font-family: 'Montserrat';
   font-weight: 400;
-  height: 100vh; }
+  height: 100vh;
+  overflow-y: hidden; }
   .spot-thing .info {
     background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%); }
     .spot-thing .info .songContainer {
@@ -7924,6 +7925,6 @@ textarea.form-control-lg {
       margin-left: -12px; }
   .spot-thing .controls {
     background: #6138f5;
-    height: 108px;
+    height: 110px;
     font-size: 28px;
     color: #FFFFFF; }

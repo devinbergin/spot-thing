@@ -1,26 +1,39 @@
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 window.addEventListener('DOMContentLoaded', () => {
-  	const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-}
-
+  	
 	// Set to 1 to turn on console logging
-	var debug = 1;
+	var debug = 0;
+
+	// Notes for testing
+	// clientID: cda49a979d894afaaa13b9975b773cf9
+	// clientSecret: d88c8c755c3d471c8c7de6db709c21df
+	// redirectURI: http://localhost:8888/callback
 
 	// jquery
-	var $ = require('jquery');
+	const $ = require('jquery');
 	window.jQuery = window.$ = $;
 
 	// spotify api
-	var SpotifyWebApi = require('spotify-web-api-node');
+	const SpotifyWebApi = require('spotify-web-api-node');
+
+	// filesystem for writing client data to json
+	const fs = require('fs');
+
+	// Open for sending URL to default browser
+	const open = require('open');
+
+	// Querystring for parsing URL
+	const queryString = require('query-string');
 	
 	// Declare user input variables
 	var clientID;
 	var clientSecret;
 	var redirectURI;
 	var callbackURL;
+
+	// Declare some globals
+	var spotifyApi;
 
 	// TODO: Need to add some error checking for the forms not being empty
 	// first form
@@ -34,11 +47,10 @@ window.addEventListener('DOMContentLoaded', () => {
 		debug && console.log(clientSecret);
 		debug && console.log(redirectURI);
 
-
 		var scopes = ['user-read-currently-playing','user-read-playback-position','user-modify-playback-state','user-read-playback-state'],
-			redirectUri = 'http://localhost:8888/callback',
-			clientId = 'cda49a979d894afaaa13b9975b773cf9',
-			clientSecret = 'd88c8c755c3d471c8c7de6db709c21df',
+			redirectUri = redirectURI,
+			clientId = clientID,
+			clientSecret = clientSecret,
 			state = '';
 
 		// Setting credentials can be done in the wrapper's constructor, or using the API object's setters.
@@ -51,98 +63,158 @@ window.addEventListener('DOMContentLoaded', () => {
 		var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
 
 		debug && console.log(authorizeURL);
+		debug && console.log('clientSecret'+clientSecret);
 
 		// Open the authorize URL for the user to accept and copy the callback url
-		window.open(authorizeURL, '_blank', 'location=yes,height=900,width=700,scrollbars=no,status=yes');
+		open(authorizeURL);
 
-		// Problems with this atm - there's no URL bar for the user to copy from
+		// Hide the first form and unhide the second one
+		$('#idSecret').hide();
+		$('#urlCode').show();
+
 	});
 
-	// 1. Open the app and get this URL from console.
-	// 2. visit the url in browser and copy the code only into the code var below inside spotLogo func	
-	// 3. Refresh the app ctrl+shift+r click the spot logo
-	// 4. Click the spotify logo
-	// 5. USE THE APP BABY
+	// second form
+	$("#urlCodeActivate").click(function() {
+		// for some reason we're losing this - TODO find out why so we don't have to find it this way
+		clientSecret = $('#clientSecretInput').val();
 
-	var credentials = {
-	clientId: 'cda49a979d894afaaa13b9975b773cf9',
-	clientSecret: 'd88c8c755c3d471c8c7de6db709c21df',
-	redirectUri: 'http://localhost:8888/callback'
-	};
+		callbackURL = $('#callbackURL').val();
 		
-	var spotifyApi;
-	
-	// 'Registration' button atm
-	$("#spotLogo").click(function() {
-		spotifyApi = new SpotifyWebApi(credentials);
+		// Parse the URL to find the code value
+		var callbackURLString = callbackURL.toString();
+		var queryStringVal = callbackURLString.split('?')[1]
+		var parsed = queryString.parse(queryStringVal);
+		var authCode = parsed.code;
+
+		debug && console.log('callbackURL: ' + callbackURL);
+		debug && console.log('callbackURLString: ' + callbackURLString);
+		debug && console.log('queryStringVal: ' + queryStringVal);
+		debug && console.log('parsed: ' + parsed.code);
+		
+		//debug && console.log(JSON.stringify('parsedURL: '+callbackURL));
+		debug && console.log('authCode: ' + authCode);
 		
 		// The code that's returned as a query parameter to the redirect URI
-		var code = 'AQBllQuhLM5cP6q8XSWygRFv-972vNyMfLUsw8AHKcYDkOCUAYtMYF2fMVajxYPblbQYJ8m1ggEz53UatHcaHK2a9mtkWQyq8QNdWTZaMuA6m0ByFos47iXULae6n0aA1fYjcN0fQUN-12NW8cnZZLCfx0H8HwidzebKKcqhWtCrQigSuVFjBzW3HrpZr6chTBv1hLBTWl27Xrdkw9Hk0tFZjuhfu6wK6iPs0q_kYDUYKM2wa11xsIQHsGVVTtaxCg0XrTsrknkhDEymPr8EYgmkJEKAxpLPB8xx9i02WNJZoEZKhk76UJh8_t-ISS79NUw';
-	
+		var code = authCode;
+
+		// Call the authorize function below and pass the code over
+		authorizeSpot(code);
+
+		// Hide the second form
+		$('#urlCode').hide();
+
+	});
+
+	// no purpose atm
+	$("#spotLogo").click(function() {
+		console.log('logo clicked')
+	});
+
+	function authorizeSpot(code) {
+		// for some reason we're losing this  - TODO find out why so we don't have to find it this way
+		clientSecret = $('#clientSecretInput').val();
+		
+		// Set credentials to pass
+		var credentials = {
+			clientId: clientID,
+			clientSecret: clientSecret,
+			redirectUri: redirectURI
+		};
+
+		debug && console.log(JSON.stringify(credentials));
+
+		spotifyApi = new SpotifyWebApi(credentials);
+		
 		// Retrieve an access token and a refresh token
 		spotifyApi.authorizationCodeGrant(code).then(
-		function(data) {
-			debug && console.log('The token expires in ' + data.body['expires_in']);
-			debug && console.log('The access token is ' + data.body['access_token']);
-			debug && console.log('The refresh token is ' + data.body['refresh_token']);
-		
-			// Set the access token on the API object to use it in later calls
-			spotifyApi.setAccessToken(data.body['access_token']);
-			spotifyApi.setRefreshToken(data.body['refresh_token']);
-		},
-		function(err) {
-			debug && console.log('Something went wrong!', err);
-		}
-		);
-	});
-
-	// Need to move thise somewhere else.. might also need to dynamically do it whenever the app gets a response back that the token has expired
-	$("#xyz").click(function() {
-		// clientId, clientSecret and refreshToken has been set on the api object previous to this call.
-		spotifyApi.refreshAccessToken().then(
 			function(data) {
-				debug && console.log('The access token has been refreshed!');
-		
-			// Save the access token so that it's used in future calls
-			spotifyApi.setAccessToken(data.body['access_token']);
+				debug && console.log('The token expires in ' + data.body['expires_in']);
+				debug && console.log('The access token is ' + data.body['access_token']);
+				debug && console.log('The refresh token is ' + data.body['refresh_token']);
+	
+				// Set the access token on the API object to use it in later calls
+				spotifyApi.setAccessToken(data.body['access_token']);
+				spotifyApi.setRefreshToken(data.body['refresh_token']);
+
+				// Since we are activated now we can start the intervals
+				startIntervals();
 			},
 			function(err) {
-				debug && console.log('Could not refresh access token', err);
-			}
-		);
-	});
-	
-	// This refreshes currently playing every 1 second until you click the album artwork (temporary)
-	var intervalId = window.setInterval(function(){
-		// Get the User's Currently Playing Track 
-		spotifyApi.getMyCurrentPlayingTrack()
-			.then(function(data) {
-				debug && console.log('Now playing track: ' + data.body.item.name);
-				debug && console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
-				debug && console.log('Now playing album: ' + data.body.item.album.name);
-				debug && console.log('Now playing image: ' + data.body.item.album.images[0].url);
-				debug && console.log('Now playing song progress ms: ' + data.body.progress_ms);
-				debug && console.log('Now playing song duration ms: ' + data.body.item.duration_ms);
-				//console.log('Now playing: ' + JSON.stringify(data.body));
-
-				var percentComplete = (data.body.progress_ms/data.body.item.duration_ms)*100;
-				percentComplete = percentComplete.toFixed(0);
-
-				$('#songName').text(data.body.item.name);
-				$('#artistName').text(data.body.item.artists[0].name);
-				$('#albumName').text(data.body.item.album.name);
-				$('#albumArt').attr('src',data.body.item.album.images[0].url);
-				$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
-
-			}, function(err) {
 				debug && console.log('Something went wrong!', err);
+			}
+			);
+
+		// setup json array to save secrets locally for later
+		var clientData = {
+			clientID: clientID,
+			clientSecret: clientSecret,
+			redirectURI: redirectURI,
+			callbackURL: callbackURL
+		};
+
+		// write client data to json file
+		// TODO: find a good temp folder to store this in
+		var clientDataString = JSON.stringify(clientData);
+		fs.writeFileSync('clientData.json',clientDataString);	
+	};
+
+	// We don't want to do this until we're authorized above
+	function startIntervals() {
+		// This refreshes currently playing every 1 second until you click the album artwork (temporary)
+		// The Lofi dev seems to say his app users get throttled while he's making 1 call every second. Might need to bump to 2 or handle the 429 responses gracefully
+		var intervalInfo = window.setInterval(function(){
+			// Get the User's Currently Playing Track 
+			spotifyApi.getMyCurrentPlayingTrack()
+				.then(function(data) {
+					debug && console.log('Now playing track: ' + data.body.item.name);
+					debug && console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
+					debug && console.log('Now playing album: ' + data.body.item.album.name);
+					debug && console.log('Now playing image: ' + data.body.item.album.images[0].url);
+					debug && console.log('Now playing song progress ms: ' + data.body.progress_ms);
+					debug && console.log('Now playing song duration ms: ' + data.body.item.duration_ms);
+					//console.log('Now playing: ' + JSON.stringify(data.body));
+
+					var percentComplete = (data.body.progress_ms/data.body.item.duration_ms)*100;
+					percentComplete = percentComplete.toFixed(0);
+
+					$('#songName').text(data.body.item.name);
+					$('#artistName').text(data.body.item.artists[0].name);
+					$('#albumName').text(data.body.item.album.name);
+					$('#albumArt').attr('src',data.body.item.album.images[0].url);
+					$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
+
+				}, function(err) {
+					debug && console.log('Something went wrong!', err);
+			});
+		}, 2000);
+
+		// Token expires every 60 minutes, so this refrehes it at 50 minutes
+		// Still need to test this is working after 50 min
+		var intervalRefresh = window.setInterval(function(){
+			// clientId, clientSecret and refreshToken has been set on the api object previous to this call.
+			spotifyApi.refreshAccessToken().then(
+				function(data) {
+					debug && console.log('The access token has been refreshed!');
+			
+				// Save the access token so that it's used in future calls
+				spotifyApi.setAccessToken(data.body['access_token']);
+				},
+				function(err) {
+					debug && console.log('Could not refresh access token', err);
+				}
+			);
+
+		}, 3000000);
+
+		// Clear both intervals - for testing only
+		$("#albumArt").click(function() {
+			clearInterval(intervalInfo);
+			clearInterval(intervalRefresh);
 		});
-	  }, 1000);
 
-	$("#albumArt").click(function() {
-		clearInterval(intervalId) 
-	});
-
+	};
+	
 	// Toggle the shuffle state
 	$("#shuffle").click(function() {
 		if ($('#shuffle').hasClass('shuffleInactive')) {
@@ -219,7 +291,5 @@ window.addEventListener('DOMContentLoaded', () => {
 			debug && console.log('Something went wrong!', err);
 		});
 	});
-	
-	
   
 })

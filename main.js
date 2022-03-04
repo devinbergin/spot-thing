@@ -23,6 +23,9 @@ function createWindow () {
   
 	// Don't allow drag to resize window
   	mainWindow.setResizable(false)
+
+	// Set window to always be on top
+	mainWindow.setAlwaysOnTop(true, 'screen');
 }
 
 // This method will be called when Electron has finished

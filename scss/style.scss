@@ -9,6 +9,35 @@
 	height:100vh;
 	overflow-y:hidden;
 
+	.overlay {
+		position:absolute;
+		top:23px;
+		left:15px;
+		height:250px;
+		width: 510px;
+		background-color:$mediumgray;
+		border-radius:10px;
+		z-index: 10;
+		padding:20px;
+	}
+
+	.btn {
+		border-radius:20px;
+		padding-right:25px;
+		padding-left:25px;
+	}
+
+	.btn-primary {
+		color: $white;
+		background-color: $spotifygreen;
+		border-color: $spotifygreen;
+
+		&:hover {
+			background-color: lighten($spotifygreen, 5%);
+			border-color: lighten($spotifygreen,5%);
+		}
+	}
+
 	.info {
 		background: $purple-gradient;
 

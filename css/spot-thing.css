@@ -7877,6 +7877,27 @@ textarea.form-control-lg {
   font-weight: 400;
   height: 100vh;
   overflow-y: hidden; }
+  .spot-thing .overlay {
+    position: absolute;
+    top: 23px;
+    left: 15px;
+    height: 250px;
+    width: 510px;
+    background-color: #f2f5f7;
+    border-radius: 10px;
+    z-index: 10;
+    padding: 20px; }
+  .spot-thing .btn {
+    border-radius: 20px;
+    padding-right: 25px;
+    padding-left: 25px; }
+  .spot-thing .btn-primary {
+    color: #FFFFFF;
+    background-color: #1DB954;
+    border-color: #1DB954; }
+    .spot-thing .btn-primary:hover {
+      background-color: #20cf5e;
+      border-color: #20cf5e; }
   .spot-thing .info {
     background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%); }
     .spot-thing .info .albumArt {

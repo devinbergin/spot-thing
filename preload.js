@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		spotifyApi = new SpotifyWebApi(credentials);
 		
 		// The code that's returned as a query parameter to the redirect URI
-		var code = 'AQCyD7NNf_Coy_wxu1x_KXrmfN4hw1PcxfocHcmA8jCQcFpEfpByXPlSHXgyRvngzM-dzscosF1B9qbGX7NbkY79BenBG9PlBAPLWsLpQDqg13wWfSNV9_dgy6XECBNFkk0p4g0w4nFjKMiJ9-bA9Zkq4P8CPxAYstbhjaK6TvOB2HI48BUAC8qzcPxkh2BoHK2SfZtHtnW19rel9UWzmWiYxJmui-bgjm09TP-cSSljaMgd6iSlIX7nB3T526G1Vg6oM-OkvefAk59O7Q27mGk4FRV_g5ND8k_qTnGN8Ts4SO_d5AKFLs5pCF7OrYHYXIo';
+		var code = 'AQBllQuhLM5cP6q8XSWygRFv-972vNyMfLUsw8AHKcYDkOCUAYtMYF2fMVajxYPblbQYJ8m1ggEz53UatHcaHK2a9mtkWQyq8QNdWTZaMuA6m0ByFos47iXULae6n0aA1fYjcN0fQUN-12NW8cnZZLCfx0H8HwidzebKKcqhWtCrQigSuVFjBzW3HrpZr6chTBv1hLBTWl27Xrdkw9Hk0tFZjuhfu6wK6iPs0q_kYDUYKM2wa11xsIQHsGVVTtaxCg0XrTsrknkhDEymPr8EYgmkJEKAxpLPB8xx9i02WNJZoEZKhk76UJh8_t-ISS79NUw';
 	
 		// Retrieve an access token and a refresh token
 		spotifyApi.authorizationCodeGrant(code).then(

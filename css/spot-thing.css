@@ -7883,10 +7883,12 @@ textarea.form-control-lg {
     left: 15px;
     height: 250px;
     width: 510px;
-    background-color: #f2f5f7;
+    background-color: #191414;
     border-radius: 10px;
     z-index: 10;
     padding: 20px; }
+    .spot-thing .overlay .about {
+      color: #FFFFFF; }
   .spot-thing .btn {
     border-radius: 20px;
     padding-right: 25px;
@@ -7902,7 +7904,7 @@ textarea.form-control-lg {
     background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%); }
     .spot-thing .info .albumArt {
       max-width: 130px;
-      box-shadow: 0 1px 5px 0 rgba(35, 35, 35, 0.6), 0 1px 4px -1px rgba(35, 35, 35, 0.6); }
+      box-shadow: 0 1px 5px 0 rgba(25, 20, 20, 0.6), 0 1px 4px -1px rgba(25, 20, 20, 0.6); }
     .spot-thing .info .songContainer {
       max-width: 325px; }
       .spot-thing .info .songContainer .albumName {

@@ -3,7 +3,7 @@
 window.addEventListener('DOMContentLoaded', () => {
   	
 	// Set to 1 to turn on console logging
-	var debug = 0;
+	var debug = 1;
 
 	// Notes for testing
 	// clientID: cda49a979d894afaaa13b9975b773cf9
@@ -106,10 +106,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	});
 
-	// no purpose atm
+	// Show about overlay
 	$("#spotLogo").click(function() {
-		console.log('logo clicked')
+		$('#about').show();
 	});
+
+	// Close about overlay
+	$('#aboutClose').click(function() {
+		$('#about').hide();
+	});	
 
 	function authorizeSpot(code) {
 		// for some reason we're losing this  - TODO find out why so we don't have to find it this way

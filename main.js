@@ -5,8 +5,8 @@ const path = require('path')
 function createWindow () {
   	// Create the browser window.
   	const mainWindow = new BrowserWindow({
-		width: 550,
-		height: 325,
+		width: 500,
+		height: 275,
 		resizeable: false,
 		autoHideMenuBar: true,
 		//frame: false,
@@ -22,7 +22,7 @@ function createWindow () {
   	mainWindow.webContents.openDevTools()
   
 	// Don't allow drag to resize window
-  	mainWindow.setResizable(false)
+  	//mainWindow.setResizable(false)
 
 	// Set window to always be on top
 	mainWindow.setAlwaysOnTop(true, 'screen');

@@ -7879,16 +7879,18 @@ textarea.form-control-lg {
   overflow-y: hidden; }
   .spot-thing .overlay {
     position: absolute;
-    top: 23px;
-    left: 15px;
-    height: 250px;
-    width: 510px;
+    top: 10%;
+    left: 5%;
+    height: 80%;
+    width: 90%;
     background-color: #191414;
     border-radius: 10px;
     z-index: 10;
     padding: 20px; }
     .spot-thing .overlay .about {
       color: #FFFFFF; }
+    .spot-thing .overlay .form-control {
+      padding: 2px 5px 2px 5px; }
   .spot-thing .btn {
     border-radius: 20px;
     padding-right: 25px;
@@ -7901,12 +7903,15 @@ textarea.form-control-lg {
       background-color: #20cf5e;
       border-color: #20cf5e; }
   .spot-thing .info {
-    background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%); }
-    .spot-thing .info .albumArt {
-      max-width: 130px;
-      box-shadow: 0 1px 5px 0 rgba(25, 20, 20, 0.6), 0 1px 4px -1px rgba(25, 20, 20, 0.6); }
+    background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%);
+    height: 70%; }
+    .spot-thing .info .albumContainer {
+      max-width: 35%; }
+      .spot-thing .info .albumContainer .albumArt {
+        max-width: 100%;
+        box-shadow: 0 1px 5px 0 rgba(25, 20, 20, 0.6), 0 1px 4px -1px rgba(25, 20, 20, 0.6); }
     .spot-thing .info .songContainer {
-      max-width: 325px; }
+      max-width: 65%; }
       .spot-thing .info .songContainer .albumName {
         font-size: 14px;
         color: #d5cafc;
@@ -7931,7 +7936,8 @@ textarea.form-control-lg {
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
-        overflow: hidden; }
+        overflow: hidden;
+        line-height: 40px; }
       .spot-thing .info .songContainer .logo {
         width: 75px;
         top: 10px;
@@ -7948,7 +7954,7 @@ textarea.form-control-lg {
       margin-left: -12px; }
   .spot-thing .controls {
     background: #6138f5;
-    height: 110px;
+    height: 30%;
     font-size: 28px;
     color: #FFFFFF; }
     .spot-thing .controls .nextSong {

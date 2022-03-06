@@ -11,10 +11,10 @@
 
 	.overlay {
 		position:absolute;
-		top:23px;
-		left:15px;
-		height:250px;
-		width: 510px;
+		top:10%;
+		left:5%;
+		height:80%;
+		width: 90%;
 		background-color:$black;
 		border-radius:10px;
 		z-index: 10;
@@ -22,6 +22,10 @@
 
 		.about {
 			color: $white;
+		}
+
+		.form-control {
+			padding:2px 5px 2px 5px;
 		}
 	}
 
@@ -44,14 +48,19 @@
 
 	.info {
 		background: $purple-gradient;
+		height:70%;
 
-		.albumArt {
-			max-width:130px;
-			box-shadow: 0 1px 5px 0 rgba($black, .6), 0 1px 4px -1px rgba($black, .6);
+		.albumContainer {
+			max-width:35%;
+
+			.albumArt {
+				max-width:100%;
+				box-shadow: 0 1px 5px 0 rgba($black, .6), 0 1px 4px -1px rgba($black, .6);
+			}
 		}
 
 		.songContainer {
-			max-width:325px;
+			max-width:65%;
 		
 			.albumName {
 				font-size:14px;
@@ -82,6 +91,7 @@
 				-webkit-line-clamp: 2;
 				-webkit-box-orient: vertical;
 				overflow:hidden;
+				line-height:40px;
 			}
 
 			.logo {
@@ -110,7 +120,7 @@
 
 	.controls {
 		background: $purple;
-		height:110px;
+		height:30%;
 		font-size:28px;
 		color:$white;
 

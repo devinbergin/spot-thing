@@ -15,7 +15,73 @@
   	</head>
   
   	<body class="spot-thing">
-		<div class="container-fluid h-100">
+		<header id="titlebar" class="titlebar">
+			<div class="drag-region">
+				<div id="window-title">
+					<span><i class="fa-brands fa-spotify fa-lg p-1"></i> spot-thing</span>
+				  </div>
+				<div id="window-controls">					
+					<div class="button" id="min-button">
+						<i class="fa-solid fa-window-minimize"></i>
+					</div>
+			  
+					<div class="button" id="close-button">
+						<i class="fa-solid fa-xmark"></i>
+					</div>
+			  
+				  </div>
+			</div>
+
+		</header>
+		<div class="container-fluid h-100 pt-4">
+			<div class="mb-3 h-100 pt-2">
+				<div class="row info">
+					<div class="col-4 p-2 my-auto albumContainer">
+						<img src="images/TheIncredibleTrueStory.jpg" class="albumArt" id="albumArt" alt="Album Art">
+					</div>
+					<div class="col-auto my-auto songContainer" align="left">
+						<div class="row no-gutters">
+							<div class="col-12 albumName" id="albumName">
+								The Incredible True Story
+							</div>
+							<div align="right" style="display:none;">
+								<img src="images/spotifyLogo.png" class="logo" alt="Spotify Logo" id="spotLogo">
+							</div>
+						</div>
+						<div class="row">
+							<input type="hidden" id="songURL" value="">
+							<div class="col-12 songName" id="songName">
+								Fade Away
+							</div>
+						</div>
+						<div class="row">
+							<input type="hidden" id="artistURL" value="">
+							<div class="col-12 artistName" id="artistName">
+								Logic
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row progressContainer">
+					<div class="progress">
+						<div class="progress-bar" role="progressbar" style="width:35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+				</div>
+				<div class="row controls">
+					<div class="col-3 my-auto" align="center">
+						<i class="fa-solid fa-shuffle shuffleInactive" id="shuffle"></i>
+					</div>
+					<div class="col-3 my-auto" align="center">
+						<i class="fa-solid fa-backward-step backSong" id="backSong"></i>
+					</div>
+					<div class="col-3 my-auto" align="center" id="playPause">
+						<i class="fa-solid fa-pause" id="pause"></i>
+					</div>
+					<div class="col-3 my-auto" align="center">
+						<i class="fa-solid fa-forward-step nextSong" id="nextSong"></i>
+					</div>
+				</div>
+			</div>
 			<div id="idSecret" class="overlay">
 				<form id="idSecretForm">
 					<div class="form-group mt-1">
@@ -58,54 +124,6 @@
 						<div class="col-12" align="center">
 							<button id="aboutClose" type="button" class="btn btn-primary">Close</button>
 						</div>
-					</div>
-				</div>
-			</div>
-			<div class="mb-3 h-100">
-				<div class="row info">
-					<div class="col-4 p-2 my-auto albumContainer">
-						<img src="images/TheIncredibleTrueStory.jpg" class="albumArt" id="albumArt" alt="Album Art">
-					</div>
-					<div class="col-auto my-auto songContainer" align="left">
-						<div class="row no-gutters">
-							<div class="col-12 albumName" id="albumName">
-								The Incredible True Story
-							</div>
-							<div align="right">
-								<img src="images/spotifyLogo.png" class="logo" alt="Spotify Logo" id="spotLogo">
-							</div>
-						</div>
-						<div class="row">
-							<input type="hidden" id="songURL" value="">
-							<div class="col-12 songName" id="songName">
-								Fade Away
-							</div>
-						</div>
-						<div class="row">
-							<input type="hidden" id="artistURL" value="">
-							<div class="col-12 artistName" id="artistName">
-								Logic
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row progressContainer">
-					<div class="progress">
-						<div class="progress-bar" role="progressbar" style="width:35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-					</div>
-				</div>
-				<div class="row controls">
-					<div class="col-3 my-auto" align="center">
-						<i class="fa-solid fa-shuffle shuffleInactive" id="shuffle"></i>
-					</div>
-					<div class="col-3 my-auto" align="center">
-						<i class="fa-solid fa-backward-step backSong" id="backSong"></i>
-					</div>
-					<div class="col-3 my-auto" align="center" id="playPause">
-						<i class="fa-solid fa-pause" id="pause"></i>
-					</div>
-					<div class="col-3 my-auto" align="center">
-						<i class="fa-solid fa-forward-step nextSong" id="nextSong"></i>
 					</div>
 				</div>
 			</div>

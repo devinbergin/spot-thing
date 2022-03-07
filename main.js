@@ -9,7 +9,7 @@ function createWindow () {
 		height: 275,
 		resizeable: false,
 		autoHideMenuBar: true,
-		//frame: false,
+		frame: false,
 		webPreferences: {
       		preload: path.join(__dirname, 'preload.js')
     	}

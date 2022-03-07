@@ -277,6 +277,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
+	// TODO: if you leave it paused for long enough (10 min ish) then you can't click play I think because of the no active device response
 	$("body").on("click", "#play", function(){
 		// Start/Resume a User's Playback 
 		spotifyApi.play()
@@ -326,5 +327,9 @@ window.addEventListener('DOMContentLoaded', () => {
 		var artistURL = $('#artistURL').val();
 		open(artistURL);
 	});
+
   
-})
+});
+
+
+

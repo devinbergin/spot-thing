@@ -7927,7 +7927,8 @@ textarea.form-control-lg {
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        max-width: 320px; }
+        max-width: 320px;
+        cursor: pointer; }
       .spot-thing .info .songContainer .songName {
         font-size: 34px;
         font-weight: 900;
@@ -7937,7 +7938,8 @@ textarea.form-control-lg {
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        line-height: 40px; }
+        line-height: 40px;
+        cursor: pointer; }
       .spot-thing .info .songContainer .logo {
         width: 75px;
         top: 10px;

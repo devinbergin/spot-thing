@@ -178,16 +178,34 @@ window.addEventListener('DOMContentLoaded', () => {
 					debug && console.log('Now playing image: ' + data.body.item.album.images[0].url);
 					debug && console.log('Now playing song progress ms: ' + data.body.progress_ms);
 					debug && console.log('Now playing song duration ms: ' + data.body.item.duration_ms);
-					//console.log('Now playing: ' + JSON.stringify(data.body));
+					debug && console.log('Artist URL: ' + data.body.item.artists[0].external_urls.spotify);
+					debug && console.log('Song URL: ' + data.body.item.external_urls.spotify);
+					debug && console.log('Is Playing (t/f): ' + data.body.is_playing);
 
+					// Full API Response
+					//debug && console.log('Now playing: ' + JSON.stringify(data.body));
+
+					// Calculate the percent complete for the progress bar
 					var percentComplete = (data.body.progress_ms/data.body.item.duration_ms)*100;
 					percentComplete = percentComplete.toFixed(0);
 
+					// Set all the info of the currently playing track
 					$('#songName').text(data.body.item.name);
 					$('#artistName').text(data.body.item.artists[0].name);
 					$('#albumName').text(data.body.item.album.name);
 					$('#albumArt').attr('src',data.body.item.album.images[0].url);
 					$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
+					$('#songURL').val(data.body.item.external_urls.spotify);
+					$('#artistURL').val(data.body.item.artists[0].external_urls.spotify);
+					var playing = data.body.is_playing;
+					playing = playing.toString();
+
+					// Set play/pause icon
+					if (playing == 'true') {
+						$('#playPause').html('<i class="fa-solid fa-pause" id="pause"></i>');
+					} else {
+						$('#playPause').html('<i class="fa-solid fa-play" id="play"></i>');
+					}
 
 				}, function(err) {
 					debug && console.log('Something went wrong!', err);
@@ -295,6 +313,18 @@ window.addEventListener('DOMContentLoaded', () => {
 			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 			debug && console.log('Something went wrong!', err);
 		});
+	});
+
+	// Open Song in browser window
+	$('#songName').click(function() {
+		var songURL = $('#songURL').val();
+		open(songURL);
+	});
+
+	// Open Artist in browser window
+	$('#artistName').click(function() {
+		var artistURL = $('#artistURL').val();
+		open(artistURL);
 	});
   
 })

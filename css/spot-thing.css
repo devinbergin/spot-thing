@@ -7908,9 +7908,11 @@ textarea.form-control-lg {
           font-weight: 400;
           font-size: 14px; }
         .spot-thing .titlebar .drag-region .window-title .dropdown-menu {
-          background-color: #783eda; }
+          background-color: #783eda;
+          border: 0px solid; }
           .spot-thing .titlebar .drag-region .window-title .dropdown-menu .dropdown-item {
-            color: #FFFFFF; }
+            color: #FFFFFF;
+            font-size: 14px; }
             .spot-thing .titlebar .drag-region .window-title .dropdown-menu .dropdown-item:hover {
               background: #8869f7; }
       .spot-thing .titlebar .drag-region .window-controls {
@@ -8011,11 +8013,6 @@ textarea.form-control-lg {
         overflow: hidden;
         line-height: 40px;
         cursor: pointer; }
-      .spot-thing .info .songContainer .logo {
-        width: 75px;
-        top: 42px;
-        right: 10px;
-        position: absolute; }
   .spot-thing .progressContainer {
     height: 5px; }
     .spot-thing .progressContainer .progress {

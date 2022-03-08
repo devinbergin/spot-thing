@@ -105,11 +105,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	});
 
-	// Show about overlay
-	$("#spotLogo").click(function() {
-		$('#about').show();
-	});
-
 	// Close about overlay
 	$('#aboutClose').click(function() {
 		$('#about').hide();

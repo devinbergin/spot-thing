@@ -48,9 +48,11 @@
 
 				.dropdown-menu {
 					background-color:darken($light-purple,5%);
+					border: 0px solid;
 
 					.dropdown-item {
 						color:$white;
+						font-size:14px;
 
 						&:hover {
 							background: lighten($purple,10%);
@@ -205,13 +207,6 @@
 				overflow:hidden;
 				line-height:40px;
 				cursor:pointer;
-			}
-
-			.logo {
-				width:75px;
-				top:42px;
-				right: 10px;
-				position:absolute;
 			}
 		}
 	}

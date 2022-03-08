@@ -7882,30 +7882,38 @@ textarea.form-control-lg {
     position: fixed;
     height: 32px;
     width: calc(100%);
-    background: linear-gradient(-45deg, #6138f5 -4%, #8753de 5%); }
+    background: #8753de; }
     .spot-thing .titlebar .drag-region {
       width: 100%;
       height: 100%;
       -webkit-app-region: drag;
       display: grid;
       grid-template-columns: auto 138px; }
-      .spot-thing .titlebar .drag-region #window-title {
+      .spot-thing .titlebar .drag-region .window-title {
         grid-column: 1;
         display: flex;
         align-items: center;
-        margin-left: 8px;
-        overflow: hidden;
-        font-family: "Segoe UI", sans-serif;
-        font-size: 12px; }
-      .spot-thing .titlebar .drag-region #window-title span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        line-height: 1.5;
-        color: #FFFFFF;
-        font-weight: 400;
-        font-size: 14px; }
-      .spot-thing .titlebar .drag-region #window-controls {
+        font-size: 12px;
+        -webkit-app-region: no-drag;
+        cursor: default;
+        padding-left: 10px;
+        width: 125px; }
+        .spot-thing .titlebar .drag-region .window-title:hover {
+          background: #783eda;
+          width: 125px; }
+        .spot-thing .titlebar .drag-region .window-title span {
+          white-space: nowrap;
+          line-height: 1.5;
+          color: #FFFFFF;
+          font-weight: 400;
+          font-size: 14px; }
+        .spot-thing .titlebar .drag-region .window-title .dropdown-menu {
+          background-color: #783eda; }
+          .spot-thing .titlebar .drag-region .window-title .dropdown-menu .dropdown-item {
+            color: #FFFFFF; }
+            .spot-thing .titlebar .drag-region .window-title .dropdown-menu .dropdown-item:hover {
+              background: #8869f7; }
+      .spot-thing .titlebar .drag-region .window-controls {
         display: grid;
         grid-template-columns: repeat(2, 46px);
         position: absolute;
@@ -7913,39 +7921,32 @@ textarea.form-control-lg {
         right: 0;
         height: 100%;
         -webkit-app-region: no-drag; }
-      .spot-thing .titlebar .drag-region #window-controls .button {
-        grid-row: 1 / span 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%; }
-      .spot-thing .titlebar .drag-region #min-button {
-        grid-column: 1; }
-        .spot-thing .titlebar .drag-region #min-button .fa-solid {
-          padding-bottom: 10px; }
-      .spot-thing .titlebar .drag-region #close-button {
-        grid-column: 2; }
+        .spot-thing .titlebar .drag-region .window-controls .button {
+          grid-row: 1 / span 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          user-select: none; }
+        .spot-thing .titlebar .drag-region .window-controls .min-button {
+          grid-column: 1; }
+          .spot-thing .titlebar .drag-region .window-controls .min-button:hover {
+            background: #783eda !important; }
+          .spot-thing .titlebar .drag-region .window-controls .min-button:active {
+            background: #783eda !important; }
+          .spot-thing .titlebar .drag-region .window-controls .min-button .fa-solid {
+            padding-bottom: 10px; }
+        .spot-thing .titlebar .drag-region .window-controls .close-button {
+          grid-column: 2; }
+          .spot-thing .titlebar .drag-region .window-controls .close-button:hover {
+            background: #783eda !important; }
+          .spot-thing .titlebar .drag-region .window-controls .close-button:active {
+            background: #783eda !important; }
       @media (-webkit-device-pixel-ratio: 1.5), (device-pixel-ratio: 1.5), (-webkit-device-pixel-ratio: 2), (device-pixel-ratio: 2), (-webkit-device-pixel-ratio: 3), (device-pixel-ratio: 3) {
-        .spot-thing .titlebar .drag-region #window-controls .icon {
+        .spot-thing .titlebar .drag-region .window-controls .icon {
           width: 10px;
           height: 10px; } }
-      .spot-thing .titlebar .drag-region #window-controls {
-        -webkit-app-region: no-drag; }
-      .spot-thing .titlebar .drag-region #window-controls .button {
-        user-select: none; }
-      .spot-thing .titlebar .drag-region #window-controls .button:hover {
-        background: rgba(255, 255, 255, 0.1); }
-      .spot-thing .titlebar .drag-region #window-controls .button:active {
-        background: rgba(255, 255, 255, 0.2); }
-      .spot-thing .titlebar .drag-region #close-button:hover {
-        background: #E81123 !important; }
-      .spot-thing .titlebar .drag-region #close-button:active {
-        background: #F1707A !important; }
-      .spot-thing .titlebar .drag-region #close-button:active .icon {
-        filter: invert(1); }
-      .spot-thing .titlebar .drag-region #restore-button {
-        display: none !important; }
   .spot-thing .overlay {
     position: absolute;
     top: 10%;
@@ -7959,7 +7960,7 @@ textarea.form-control-lg {
     .spot-thing .overlay .about {
       color: #FFFFFF; }
     .spot-thing .overlay .form-control {
-      padding: 2px 5px 2px 5px; }
+      padding: 5px 5px 5px 5px; }
   .spot-thing .btn {
     border-radius: 20px;
     padding-right: 25px;
@@ -7973,7 +7974,8 @@ textarea.form-control-lg {
       border-color: #20cf5e; }
   .spot-thing .info {
     background: linear-gradient(-45deg, #6138f5 0%, #8753de 30%);
-    height: 70%; }
+    height: 70%;
+    padding-left: 2%; }
     .spot-thing .info .albumContainer {
       max-width: 35%; }
       .spot-thing .info .albumContainer .albumArt {

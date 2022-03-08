@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
+const ipc = require("electron").ipcMain;
 
 function createWindow () {
   	// Create the browser window.
@@ -11,7 +12,9 @@ function createWindow () {
 		autoHideMenuBar: true,
 		frame: false,
 		webPreferences: {
-      		preload: path.join(__dirname, 'preload.js')
+      		preload: path.join(__dirname, 'preload.js'),
+			nodeIntegration: true, 
+            contextIsolation: false
     	}
   	})
 
@@ -26,6 +29,11 @@ function createWindow () {
 
 	// Set window to always be on top
 	mainWindow.setAlwaysOnTop(true, 'screen');
+	
+	// Sent over from the renderer - minimize 
+	ipc.on("toggle-minimize-window", function(event) {
+        mainWindow.minimize();
+    });
 }
 
 // This method will be called when Electron has finished

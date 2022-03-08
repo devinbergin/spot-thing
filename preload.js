@@ -1,5 +1,3 @@
-// All of the Node.js APIs are available in the preload process.
-// It has the same sandbox as a Chrome extension.
 window.addEventListener('DOMContentLoaded', () => {
   	
 	// Set to 1 to turn on console logging
@@ -25,6 +23,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Querystring for parsing URL
 	const queryString = require('query-string');
+	
 	
 	// Declare user input variables
 	var clientID;
@@ -170,7 +169,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		// The Lofi dev seems to say his app users get throttled while he's making 1 call every second. Might need to bump to 2 or handle the 429 responses gracefully
 		var intervalInfo = window.setInterval(function(){
 			// Get the User's Currently Playing Track 
-			spotifyApi.getMyCurrentPlayingTrack()
+			spotifyApi.getMyCurrentPlaybackState()
 				.then(function(data) {
 					debug && console.log('Now playing track: ' + data.body.item.name);
 					debug && console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
@@ -181,6 +180,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					debug && console.log('Artist URL: ' + data.body.item.artists[0].external_urls.spotify);
 					debug && console.log('Song URL: ' + data.body.item.external_urls.spotify);
 					debug && console.log('Is Playing (t/f): ' + data.body.is_playing);
+					debug && console.log('Shuffle State (t/f): ' + data.body.shuffle_state);
 
 					// Full API Response
 					//debug && console.log('Now playing: ' + JSON.stringify(data.body));
@@ -198,13 +198,24 @@ window.addEventListener('DOMContentLoaded', () => {
 					$('#songURL').val(data.body.item.external_urls.spotify);
 					$('#artistURL').val(data.body.item.artists[0].external_urls.spotify);
 					var playing = data.body.is_playing;
+					var shuffle = data.body.shuffle_state;
 					playing = playing.toString();
+					shuffle = shuffle.toString();
 
 					// Set play/pause icon
 					if (playing == 'true') {
 						$('#playPause').html('<i class="fa-solid fa-pause" id="pause"></i>');
 					} else {
 						$('#playPause').html('<i class="fa-solid fa-play" id="play"></i>');
+					}
+
+					// Set shuffle toggle
+					if (shuffle == 'true') {
+						$('#shuffle').addClass('shuffleActive');
+						$('#shuffle').removeClass('shuffleInactive');
+					} else {
+						$('#shuffle').removeClass('shuffleActive');
+						$('#shuffle').addClass('shuffleInactive');
 					}
 
 				}, function(err) {
@@ -322,12 +333,37 @@ window.addEventListener('DOMContentLoaded', () => {
 		open(songURL);
 	});
 
+	// Dropdown Menu
+	$('#menu').click(function() {
+		$('.dropdown-menu').toggle();
+	});
+
+	// About Link
+	$('#aboutLink').click(function() {
+		$('#about').show();
+	});
+
+	// Bug Report Link
+	$('#bugLink').click(function() {
+		open('https://github.com/devinbergin/spot-thing/issues/new');
+	});
+
+	// Tip Link
+	$('#tipLink').click(function() {
+		open('https://www.buymeacoffee.com/devinbergin');
+	});
+
+
 	// Open Artist in browser window
 	$('#artistName').click(function() {
 		var artistURL = $('#artistURL').val();
 		open(artistURL);
 	});
 
+	// Close the app
+	$('#close-button').click(function() {
+		window.close();
+	});
   
 });
 

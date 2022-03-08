@@ -7,6 +7,6 @@ $mediumgray: #f2f5f7;
 $darkgray: #333333;
 $white: #FFFFFF;
 $purple: #6138f5;
-$purple-gradient: linear-gradient(-45deg, $purple 0%, #8753de 30%);
-$purple-gradient-title: linear-gradient(-45deg, $purple -4%, #8753de 5%);
+$light-purple: #8753de;
+$purple-gradient: linear-gradient(-45deg, $purple 0%, $light-purple 30%);
 $spotifygreen: #1DB954;

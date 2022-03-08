@@ -15,17 +15,25 @@
   	</head>
   
   	<body class="spot-thing">
-		<header id="titlebar" class="titlebar">
+		<header class="titlebar">
 			<div class="drag-region">
-				<div id="window-title">
-					<span><i class="fa-brands fa-spotify fa-lg p-1"></i> spot-thing</span>
-				  </div>
-				<div id="window-controls">					
-					<div class="button" id="min-button">
+				<div class="window-title" id="menu">
+					<div class="dropdown">
+						<span data-toggle="dropdown"><i class="fa-brands fa-spotify fa-lg p-1"></i> spot-thing</span>
+
+						<div class="dropdown-menu" aria-labelledby="menu">
+							<a class="dropdown-item" id="aboutLink">About</a>
+						  	<a class="dropdown-item" id="bugLink">Report Bug</a>
+						  	<a class="dropdown-item" id="tipLink">Buy me a coffee</a>
+						</div>
+					</div>
+				</div>
+				<div class="window-controls">					
+					<div class="button min-button" id="min-button">
 						<i class="fa-solid fa-window-minimize"></i>
 					</div>
 			  
-					<div class="button" id="close-button">
+					<div class="button close-button" id="close-button">
 						<i class="fa-solid fa-xmark"></i>
 					</div>
 			  
@@ -33,13 +41,13 @@
 			</div>
 
 		</header>
-		<div class="container-fluid h-100 pt-4">
+		<div class="container-fluid h-100 pt-3">
 			<div class="mb-3 h-100 pt-2">
 				<div class="row info">
-					<div class="col-4 p-2 my-auto albumContainer">
+					<div class="col-5 p-2 my-auto albumContainer">
 						<img src="images/TheIncredibleTrueStory.jpg" class="albumArt" id="albumArt" alt="Album Art">
 					</div>
-					<div class="col-auto my-auto songContainer" align="left">
+					<div class="col-7 my-auto songContainer" align="left">
 						<div class="row no-gutters">
 							<div class="col-12 albumName" id="albumName">
 								The Incredible True Story
@@ -93,7 +101,7 @@
 					<div class="form-group mt-2">
 						<input type="text" class="form-control" id="redirectInput" placeholder="Redirect URI Ex: http://localhost:8888/callback">
 					</div>
-					<div class="row mt-2">
+					<div class="row mt-3">
 						<div class="col-12" align="center">
 							<button id="idSecretNext" type="button" class="btn btn-primary">Next</button>
 						</div>
@@ -104,7 +112,7 @@
 				<form id="urlForm">
     				<input type="text" class="form-control" id="callbackURL" aria-describedby="callbackHelp" placeholder="Callback URL">
     				<small id="callbackHelp" class="form-text text-muted">Accept the permissions in the new window for the app to access your account. Then copy the full URL it redirects to and paste it here.</small>
-					<div class="row mt-2">
+					<div class="row mt-3">
 						<div class="col-12" align="center">
 							<button id="urlCodeActivate" type="button" class="btn btn-primary">Activate</button>
 						</div>
@@ -112,7 +120,7 @@
 				</form>
 			</div>
 			<div id="about" class="overlay" style="display:none;">
-				<div class="row" align="center">
+				<div class="row mt-3" align="center">
 					<div class="col-12 about mt-2">
 						spot-thing
 						<br>

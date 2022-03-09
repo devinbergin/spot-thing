@@ -1,14 +1,5 @@
 <div id="top"></div>
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -65,7 +56,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<p align="center">
+  <img src="images/currentUI.png">
+</p>
 
 I built spot-thing to be the spotify mini player experience on desktop that I always wanted. I tried several that are available and none really hit the mark for me. I saw the release of Car Thing and it looked like the perfect UI for a mini player. Debated grabbing one and popping it on my desk but instead, I decided to dive into my first Electron/Node JS application and build it myself. 
 
@@ -89,31 +82,43 @@ I built spot-thing to be the spotify mini player experience on desktop that I al
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To get a local copy up and running follow these steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * NodeJS - Visit https://nodejs.org/en/download/ to get it installed
 * Git - Visit https://git-scm.com/downloads to get it installed
+* Spotify Premium Account
+
+### Setup
+
+To utilize the app you will need to create a Spotify App inside your Spotify Developer Dashboard. 
+
+1. Visit xxx
+2. Click here
+3. Click there
 
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/devinbergin/spot-thing.git
+   ```
+2. Move into the new directory
+   ```sh
+   cd spot-thing
    ```
 3. Install NPM packages
    ```sh
    npm install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+4. Start the App!
+   ```sh
+   npm start
    ```
+5. Enter your spotify app details in the forms. Once complete, begin playing your media from your main spotify controller.
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -124,7 +129,13 @@ This is an example of how to list things you need to use the software and how to
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+### Working with scss
+
+This project utilizes node-sass and scss files for compiled css. You will find several scss files containing the css code. 
+- spot-thing.scss
+- variables.scss
+- style.scss
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -190,21 +201,3 @@ Project Link: [https://github.com/devinbergin/spot-thing](https://github.com/dev
 * []()
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/devinbergin/spot-thing.svg?style=for-the-badge
-[contributors-url]: https://github.com/devinbergin/spot-thing/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/devinbergin/spot-thing.svg?style=for-the-badge
-[forks-url]: https://github.com/devinbergin/spot-thing/network/members
-[stars-shield]: https://img.shields.io/github/stars/devinbergin/spot-thing.svg?style=for-the-badge
-[stars-url]: https://github.com/devinbergin/spot-thing/stargazers
-[issues-shield]: https://img.shields.io/github/issues/devinbergin/spot-thing.svg?style=for-the-badge
-[issues-url]: https://github.com/devinbergin/spot-thing/issues
-[license-shield]: https://img.shields.io/github/license/devinbergin/spot-thing.svg?style=for-the-badge
-[license-url]: https://github.com/devinbergin/spot-thing/LICENSE.md
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/devinbergin
-[product-screenshot]: images/currentUI.png

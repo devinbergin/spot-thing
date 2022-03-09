@@ -13,7 +13,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/devinbergin/spot-thing">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/spot-thing-logos_transparent.png" alt="Logo" width="400">
   </a>
 
 <h3 align="center">spot-thing</h3>
@@ -67,7 +67,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+I built spot-thing to be the spotify mini player experience on desktop that I always wanted. I tried several that are available and none really hit the mark for me. I saw the release of Car Thing and it looked like the perfect UI for a mini player. Debated grabbing one and popping it on my desk but instead, I decided to dive into my first Electron/Node JS application and build it myself. 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -75,14 +75,12 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Built With
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
+* [Electron](https://www.electronjs.org/)
+* [Node.js](https://nodejs.org/)
+* [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
+* [Font Awesome](https://fontawesome.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -97,10 +95,9 @@ To get a local copy up and running follow these simple example steps.
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* NodeJS - Visit https://nodejs.org/en/download/ to get it installed
+* Git - Visit https://git-scm.com/downloads to get it installed
+
 
 ### Installation
 

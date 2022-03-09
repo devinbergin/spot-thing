@@ -134,7 +134,20 @@ Use this space to show useful examples of how a project can be used. Additional 
 This project utilizes node-sass and scss files for compiled css. You will find several scss files containing the css code. 
 - spot-thing.scss
 - variables.scss
+- fonts.scss
 - style.scss
+
+From a bash terminal, cd into he spot-thing folder and run this command
+```sh
+npm run scss
+```
+
+This will recompile the CSS file for you on each save while developing locally. 
+
+You can also run a command to build the css if you prefer to use a minified version
+```sh
+npm run build-css
+```
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>

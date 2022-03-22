@@ -23,6 +23,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Querystring for parsing URL
 	const queryString = require('query-string');
+
+	// fast-color & request & shader for getting album artwork color
+	const color = require('fast-average-color-node');
+	const request = require('request');
+	const shader = require('shader');
 	
 	
 	// Declare user input variables
@@ -179,6 +184,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
 					// Full API Response
 					//debug && console.log('Now playing: ' + JSON.stringify(data.body));
+
+					// Get album artwork color
+					var url = data.body.item.album.images[0].url;
+					request({ url, encoding: null }, (err, resp, buffer) => {
+						color.getAverageColor(buffer).then(color => {
+							debug && console.log('Album Color: '+color.hex);
+
+							// Set the UI colors from the album artwork
+							// TODO - set hover elements
+							// TODO - set other random elements
+							$('.titlebar').css('background',shader(color.hex, -.4));
+							$('.dropdown-menu').css('background-color',shader(color.hex, -.5));
+							$('.info').css('background','linear-gradient(-45deg, '+shader(color.hex, -.2)+' 0%, '+shader(color.hex, -.4)+' 30%)');
+							$('.controls').css('background',shader(color.hex, -.6));
+							$('.progress').css('background-color',shader(color.hex, -.8));
+							
+						});
+					});
 
 					// Calculate the percent complete for the progress bar
 					var percentComplete = (data.body.progress_ms/data.body.item.duration_ms)*100;

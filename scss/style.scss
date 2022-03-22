@@ -84,11 +84,11 @@
 					grid-column: 1;
 
 					&:hover {
-						background: darken($light-purple,5%) !important;
+						color:$white !important;
 					}
 
 					&:active {
-						background: darken($light-purple,5%) !important;
+						color:$white !important;
 					}
 	
 					.fa-solid {
@@ -100,11 +100,11 @@
 					grid-column: 2;
 
 					&:hover {
-						background: darken($light-purple,5%) !important;
+						color:$white !important;
 					}
 
 					&:active {
-						background: darken($light-purple,5%) !important;
+						color:$white !important;
 					}
 				}
 			}

@@ -199,7 +199,17 @@ window.addEventListener('DOMContentLoaded', () => {
 							$('.info').css('background','linear-gradient(-45deg, '+shader(color.hex, -.2)+' 0%, '+shader(color.hex, -.4)+' 30%)');
 							$('.controls').css('background',shader(color.hex, -.6));
 							$('.progress').css('background-color',shader(color.hex, -.8));
-							
+
+							$('.window-title').css('background',shader(color.hex, -.4));
+							$('.window-title').hover(
+								function () {
+								   $(this).css('background',shader(color.hex, -.5));
+								}, 
+								 
+								function () {
+								   $(this).css('background',shader(color.hex, -.4));
+								}
+							);
 						});
 					});
 

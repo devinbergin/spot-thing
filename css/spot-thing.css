@@ -7934,17 +7934,17 @@ textarea.form-control-lg {
         .spot-thing .titlebar .drag-region .window-controls .min-button {
           grid-column: 1; }
           .spot-thing .titlebar .drag-region .window-controls .min-button:hover {
-            background: #783eda !important; }
+            color: #FFFFFF !important; }
           .spot-thing .titlebar .drag-region .window-controls .min-button:active {
-            background: #783eda !important; }
+            color: #FFFFFF !important; }
           .spot-thing .titlebar .drag-region .window-controls .min-button .fa-solid {
             padding-bottom: 10px; }
         .spot-thing .titlebar .drag-region .window-controls .close-button {
           grid-column: 2; }
           .spot-thing .titlebar .drag-region .window-controls .close-button:hover {
-            background: #783eda !important; }
+            color: #FFFFFF !important; }
           .spot-thing .titlebar .drag-region .window-controls .close-button:active {
-            background: #783eda !important; }
+            color: #FFFFFF !important; }
       @media (-webkit-device-pixel-ratio: 1.5), (device-pixel-ratio: 1.5), (-webkit-device-pixel-ratio: 2), (device-pixel-ratio: 2), (-webkit-device-pixel-ratio: 3), (device-pixel-ratio: 3) {
         .spot-thing .titlebar .drag-region .window-controls .icon {
           width: 10px;

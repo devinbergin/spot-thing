@@ -13,7 +13,7 @@
   "author": "Devin Bergin",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^19.0.4"
+    "electron": "^19.0.8"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.1.1",

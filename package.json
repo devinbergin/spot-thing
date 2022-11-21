@@ -14,7 +14,7 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^21.3.0",
-    "electron-packager": "^15.5.1"
+    "electron-packager": "^17.1.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.1",

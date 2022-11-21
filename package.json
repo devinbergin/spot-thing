@@ -21,7 +21,7 @@
     "bootstrap": "^5.2.2",
     "fast-average-color-node": "^2.4.0",
     "fs": "0.0.1-security",
-    "jquery": "^3.6.0",
+    "jquery": "^3.6.1",
     "node-sass": "^8.0.0",
     "open": "^8.4.0",
     "query-string": "^7.1.1",

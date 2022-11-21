@@ -193,20 +193,20 @@ window.addEventListener('DOMContentLoaded', () => {
 							// Set the UI colors from the album artwork
 							// TODO - set hover elements
 							// TODO - set other random elements
-							$('.titlebar').css('background',shader(color.hex, -.4));
-							$('.dropdown-menu').css('background-color',shader(color.hex, -.5));
-							$('.info').css('background','linear-gradient(-45deg, '+shader(color.hex, -.2)+' 0%, '+shader(color.hex, -.4)+' 30%)');
-							$('.controls').css('background',shader(color.hex, -.6));
-							$('.progress').css('background-color',shader(color.hex, -.8));
+							$('.titlebar').css('background',shader(color.hex, -.1));
+							$('.dropdown-menu').css('background-color',shader(color.hex, -.2));
+							$('.info').css('background',shader(color.hex, -.1));
+							$('.controls').css('background',shader(color.hex, -.4));
+							$('.progress').css('background-color',shader(color.hex, -.6));
 
-							$('.window-title').css('background',shader(color.hex, -.4));
+							$('.window-title').css('background',shader(color.hex, -.1));
 							$('.window-title').hover(
 								function () {
-								   $(this).css('background',shader(color.hex, -.5));
+								   $(this).css('background',shader(color.hex, -.2));
 								}, 
 								 
 								function () {
-								   $(this).css('background',shader(color.hex, -.4));
+								   $(this).css('background',shader(color.hex, -.1));
 								}
 							);
 						});

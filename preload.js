@@ -141,30 +141,29 @@ window.addEventListener('DOMContentLoaded', () => {
 				spotifyApi.setAccessToken(data.body['access_token']);
 				spotifyApi.setRefreshToken(data.body['refresh_token']);
 
+				// setup json array to save secrets locally for later
+				var clientData = {
+					accessToken: data.body['access_token'],
+					refreshToken: data.body['refresh_token']
+				};
+
+				// write client data to json file
+				// TODO: find a good temp folder to store this in
+				var clientDataString = JSON.stringify(clientData);
+				fs.writeFileSync('clientData.json',clientDataString);
+
 				// Since we are activated now we can start the intervals
-				startIntervals();
+				startIntervals(data.body['refresh_token']);
 			},
 			function(err) {
 				debug && console.log('Something went wrong!', err);
 			}
 			);
-
-		// setup json array to save secrets locally for later
-		var clientData = {
-			clientID: clientID,
-			clientSecret: clientSecret,
-			redirectURI: redirectURI,
-			callbackURL: callbackURL
-		};
-
-		// write client data to json file
-		// TODO: find a good temp folder to store this in
-		var clientDataString = JSON.stringify(clientData);
-		fs.writeFileSync('clientData.json',clientDataString);	
+	
 	};
 
 	// We don't want to do this until we're authorized above
-	function startIntervals() {
+	function startIntervals(refreshToken) {
 		// This refreshes currently playing every 1 second until you click the album artwork (temporary)
 		// The Lofi dev seems to say his app users get throttled while he's making 1 call every second. Might need to bump to 2 or handle the 429 responses gracefully
 		var intervalInfo = window.setInterval(function(){
@@ -261,6 +260,18 @@ window.addEventListener('DOMContentLoaded', () => {
 			
 				// Save the access token so that it's used in future calls
 				spotifyApi.setAccessToken(data.body['access_token']);
+
+				// setup json array to save secrets locally for later
+				var clientData = {
+					accessToken: data.body['access_token'],
+					refreshToken: refreshToken
+				};
+
+				// write client data to json file
+				// TODO: find a good temp folder to store this in
+				var clientDataString = JSON.stringify(clientData);
+				fs.writeFileSync('clientData.json',clientDataString);
+
 				},
 				function(err) {
 					debug && console.log('Could not refresh access token', err);

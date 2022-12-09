@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
   	
 	// Set to 1 to turn on console logging
-	var debug = 0;
+	var debug = 1;
 
 	// Notes for testing
 	// clientID: cda49a979d894afaaa13b9975b773cf9
@@ -43,6 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	var spotifyApi;
 
 	// Check if the clientData.json already exists
+	// TODO - Seems like these tokens expire after some time so need to handle that gracefully and show forms for now
 	var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\clientData.json';
 	fs.readFile(path, "utf8", (err, clientData) => {
 		if (err) {
@@ -248,7 +249,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					debug && console.log('Shuffle State (t/f): ' + data.body.shuffle_state);
 
 					// Full API Response
-					//debug && console.log('Now playing: ' + JSON.stringify(data.body));
+					debug && console.log('Now playing: ' + JSON.stringify(data.body));
 
 					// Get album artwork color
 					var url = data.body.item.album.images[0].url;
@@ -257,10 +258,9 @@ window.addEventListener('DOMContentLoaded', () => {
 							debug && console.log('Album Color: '+color.hex);
 
 							// Set the UI colors from the album artwork
-							// TODO - set hover elements
 							// TODO - set other random elements
 							$('.titlebar').css('background',shader(color.hex, -.1));
-							$('.dropdown-menu').css('background-color',shader(color.hex, -.2));
+							$('.dropdown-menu').css('background-color',shader(color.hex, -.1));
 							$('.info').css('background',shader(color.hex, -.1));
 							$('.controls').css('background',shader(color.hex, -.4));
 							$('.progress').css('background-color',shader(color.hex, -.6));
@@ -271,6 +271,15 @@ window.addEventListener('DOMContentLoaded', () => {
 								   $(this).css('background',shader(color.hex, -.2));
 								}, 
 								 
+								function () {
+								   $(this).css('background',shader(color.hex, -.1));
+								}
+							);
+							
+							$('.dropdown-item').hover(
+								function () {
+								   $(this).css('background',shader(color.hex, -.2));
+								}, 
 								function () {
 								   $(this).css('background',shader(color.hex, -.1));
 								}
@@ -287,6 +296,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					$('#artistName').text(data.body.item.artists[0].name);
 					$('#albumName').text(data.body.item.album.name);
 					$('#albumArt').attr('src',data.body.item.album.images[0].url);
+					$('#albumURL').val(data.body.item.album.external_urls.spotify);
 					$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
 					$('#songURL').val(data.body.item.external_urls.spotify);
 					$('#artistURL').val(data.body.item.artists[0].external_urls.spotify);
@@ -348,17 +358,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					debug && console.log('Could not refresh access token', err);
 				}
 			);
-
 		}, 3000000);
-
-		// Clear both intervals - for debugging only
-		$("#albumArt").click(function() {
-			if (debug) {
-				clearInterval(intervalInfo);
-				clearInterval(intervalRefresh);
-			}
-		});
-
 	};
 	
 	// Toggle the shuffle state
@@ -371,7 +371,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				$('#shuffle').addClass('shuffleActive');
 				$('#shuffle').removeClass('shuffleInactive');
 			}, function  (err) {
-				//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+				// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 				debug && console.log('Something went wrong!', err);
 			});
 
@@ -382,7 +382,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				$('#shuffle').removeClass('shuffleActive');
 				$('#shuffle').addClass('shuffleInactive');
 			}, function  (err) {
-				//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+				// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 				debug && console.log('Something went wrong!', err);
 			});
 		}
@@ -395,7 +395,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			debug && console.log('Playback paused');
 			$('#playPause').html('<i class="fa-solid fa-play" id="play"></i>');
 		}, function(err) {
-			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 			debug && console.log('Something went wrong!', err);
 		});
 	});
@@ -408,7 +408,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			debug && console.log('Playback started');
 			$('#playPause').html('<i class="fa-solid fa-pause" id="pause"></i>');
 		}, function(err) {
-			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 			debug && console.log('Something went wrong!', err);
 		});
 	});
@@ -421,7 +421,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		.then(function() {
 			debug && console.log('Skip to next');
 		}, function(err) {
-			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 			debug && console.log('Something went wrong!', err);
 		});
 	});
@@ -434,7 +434,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		.then(function() {
 			debug && console.log('Skip to previous');
 		}, function(err) {
-			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
 			debug && console.log('Something went wrong!', err);
 		});
 	});
@@ -443,6 +443,30 @@ window.addEventListener('DOMContentLoaded', () => {
 	$('#songName').click(function() {
 		var songURL = $('#songURL').val();
 		open(songURL);
+	});
+
+	// Open Artist in browser window
+	$('#artistName').click(function() {
+		var artistURL = $('#artistURL').val();
+		open(artistURL);
+	});
+
+	// Open Album in browser window
+	$('#albumName').click(function() {
+		var albumURL = $('#albumURL').val();
+		open(albumURL);
+	});
+
+	// Open Album in browser window
+	$("#albumArt").click(function() {
+		if (debug) {
+			// Clear both intervals - for debugging only
+			clearInterval(intervalInfo);
+			clearInterval(intervalRefresh);
+		} else {
+			var albumURL = $('#albumURL').val();
+			open(albumURL);
+		}
 	});
 
 	// Dropdown Menu
@@ -463,13 +487,6 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Tip Link
 	$('#tipLink').click(function() {
 		open('https://www.buymeacoffee.com/devinbergin');
-	});
-
-
-	// Open Artist in browser window
-	$('#artistName').click(function() {
-		var artistURL = $('#artistURL').val();
-		open(artistURL);
 	});
 
 	// Close the app

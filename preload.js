@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
   	
 	// Set to 1 to turn on console logging
-	var debug = 1;
+	var debug = 0;
 
 	// Notes for testing
 	// clientID: cda49a979d894afaaa13b9975b773cf9

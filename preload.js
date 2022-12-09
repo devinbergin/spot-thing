@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const $ = require('jquery');
 	window.jQuery = window.$ = $;
 
-	// spotify api
+	// Spotify api
 	const SpotifyWebApi = require('spotify-web-api-node');
 
 	// filesystem for writing client data to json
@@ -28,7 +28,10 @@ window.addEventListener('DOMContentLoaded', () => {
 	const color = require('fast-average-color-node');
 	const request = require('request');
 	const shader = require('shader');
-	
+
+	// For getting the local username
+	const os = require ('os');
+	const username = os.userInfo ().username;
 	
 	// Declare user input variables
 	var clientID;
@@ -39,48 +42,77 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Declare some globals
 	var spotifyApi;
 
-	// TODO: Need to add some error checking for the forms not being empty
-	// first form
-	$("#idSecretNext").click(function() {	
-		// we have the secrets
-		clientID = $('#clientIDInput').val();
-		clientSecret = $('#clientSecretInput').val();
-		redirectURI = $('#redirectInput').val();
+	// Check if the clientData.json already exists
+	var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\clientData.json';
+	fs.readFile(path, "utf8", (err, clientData) => {
+		if (err) {
+			// No file found, do nothing
+			debug && console.log("File read failed:", err);
+			return;
+		}
 
-		debug && console.log(clientID);
-		debug && console.log(clientSecret);
-		debug && console.log(redirectURI);
+		// We found the file, now get the secrets
+		var clientDataArray = JSON.parse(clientData);
+		var accessToken = clientDataArray.accessToken;
+		var refreshToken = clientDataArray.refreshToken;
 
-		var scopes = ['user-read-currently-playing','user-read-playback-position','user-modify-playback-state','user-read-playback-state'],
-			redirectUri = redirectURI,
-			clientId = clientID,
-			clientSecret = clientSecret,
-			state = '';
+		debug && console.log("File data:", clientData);
+		debug && console.log("clientDataArray:", clientDataArray);
+		debug && console.log("accessToken:", accessToken);
+		debug && console.log("refreshToken:", refreshToken);
 
-		// Setting credentials can be done in the wrapper's constructor, or using the API object's setters.
-		var spotifyApi = new SpotifyWebApi({
-			redirectUri: redirectUri,
-			clientId: clientId
-		});
+		// TODO: Reauthorize with the tokens we got
+		
 
-		// Create the authorization URL
-		var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
 
-		debug && console.log(authorizeURL);
-		debug && console.log('clientSecret'+clientSecret);
+	});
 
-		// Open the authorize URL for the user to accept and copy the callback url
-		open(authorizeURL);
+	// First form
+	$("#idSecretNext").click(function() {		
+		// Check if the fields are filled out
+		if ($('#idSecretForm')[0].checkValidity() == false) {
+			$('#idSecretForm')[0].reportValidity()
+		} else {
+		
+			// Get the secrets
+			clientID = $('#clientIDInput').val();
+			clientSecret = $('#clientSecretInput').val();
+			redirectURI = $('#redirectInput').val();
 
-		// Hide the first form and unhide the second one
-		$('#idSecret').hide();
-		$('#urlCode').show();
+			debug && console.log(clientID);
+			debug && console.log(clientSecret);
+			debug && console.log(redirectURI);
 
+			var scopes = ['user-read-currently-playing','user-read-playback-position','user-modify-playback-state','user-read-playback-state'],
+				redirectUri = redirectURI,
+				clientId = clientID,
+				clientSecret = clientSecret,
+				state = '';
+
+			// Setting credentials can be done in the wrapper's constructor, or using the API object's setters.
+			var spotifyApi = new SpotifyWebApi({
+				redirectUri: redirectUri,
+				clientId: clientId
+			});
+
+			// Create the authorization URL
+			var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
+
+			debug && console.log(authorizeURL);
+			debug && console.log('clientSecret'+clientSecret);
+
+			// Open the authorize URL for the user to accept and copy the callback url
+			open(authorizeURL);
+
+			// Hide the first form and unhide the second one
+			$('#idSecret').hide();
+			$('#urlCode').show();
+		}
 	});
 
 	// second form
 	$("#urlCodeActivate").click(function() {
-		// for some reason we're losing this - TODO find out why so we don't have to find it this way
+		// Get the clientSecret again because it gets lost on its way here
 		clientSecret = $('#clientSecretInput').val();
 
 		callbackURL = $('#callbackURL').val();
@@ -116,7 +148,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	});	
 
 	function authorizeSpot(code) {
-		// for some reason we're losing this  - TODO find out why so we don't have to find it this way
+		// Get the clientSecret again because it gets lost on its way here
 		clientSecret = $('#clientSecretInput').val();
 		
 		// Set credentials to pass
@@ -147,10 +179,16 @@ window.addEventListener('DOMContentLoaded', () => {
 					refreshToken: data.body['refresh_token']
 				};
 
-				// write client data to json file
-				// TODO: find a good temp folder to store this in
+				// Write client data to json file
 				var clientDataString = JSON.stringify(clientData);
-				fs.writeFileSync('clientData.json',clientDataString);
+				var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+				
+				if (!fs.existsSync(path)){
+					fs.mkdirSync(path);
+					fs.writeFileSync(path+'clientData.json',clientDataString);
+				} else {
+					fs.writeFileSync(path+'clientData.json',clientDataString);
+				}
 
 				// Since we are activated now we can start the intervals
 				startIntervals(data.body['refresh_token']);
@@ -259,16 +297,22 @@ window.addEventListener('DOMContentLoaded', () => {
 				// Save the access token so that it's used in future calls
 				spotifyApi.setAccessToken(data.body['access_token']);
 
-				// setup json array to save secrets locally for later
+				// Setup json array to save secrets locally for later
 				var clientData = {
 					accessToken: data.body['access_token'],
 					refreshToken: refreshToken
 				};
 
-				// write client data to json file
-				// TODO: find a good temp folder to store this in
+				// Write client data to json file
 				var clientDataString = JSON.stringify(clientData);
-				fs.writeFileSync('clientData.json',clientDataString);
+				var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+				
+				if (!fs.existsSync(path)){
+					fs.mkdirSync(path);
+					fs.writeFileSync(path+'clientData.json',clientDataString);
+				} else {
+					fs.writeFileSync(path+'clientData.json',clientDataString);
+				}
 
 				},
 				function(err) {
@@ -278,10 +322,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		}, 3000000);
 
-		// Clear both intervals - for testing only
+		// Clear both intervals - for debugging only
 		$("#albumArt").click(function() {
-			clearInterval(intervalInfo);
-			clearInterval(intervalRefresh);
+			if (debug) {
+				clearInterval(intervalInfo);
+				clearInterval(intervalRefresh);
+			}
 		});
 
 	};

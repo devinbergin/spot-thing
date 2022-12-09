@@ -152,5 +152,6 @@ npm run build-css
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Building the app
-TODO
+```sh
+npm run dist
 ```

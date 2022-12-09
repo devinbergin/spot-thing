@@ -158,13 +158,12 @@ window.addEventListener('DOMContentLoaded', () => {
 			function(err) {
 				debug && console.log('Something went wrong!', err);
 			}
-			);
-	
+		);
 	};
 
 	// We don't want to do this until we're authorized above
 	function startIntervals(refreshToken) {
-		// This refreshes currently playing every 1 second until you click the album artwork (temporary)
+		// This refreshes currently playing
 		// The Lofi dev seems to say his app users get throttled while he's making 1 call every second. Might need to bump to 2 or handle the 429 responses gracefully
 		var intervalInfo = window.setInterval(function(){
 			// Get the User's Currently Playing Track 
@@ -251,7 +250,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		}, 2000);
 
 		// Token expires every 60 minutes, so this refrehes it at 50 minutes
-		// Still need to test this is working after 50 min
 		var intervalRefresh = window.setInterval(function(){
 			// clientId, clientSecret and refreshToken has been set on the api object previous to this call.
 			spotifyApi.refreshAccessToken().then(

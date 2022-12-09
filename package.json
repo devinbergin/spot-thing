@@ -13,7 +13,7 @@
   "author": "Devin Bergin",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^21.3.0",
+    "electron": "^22.0.0",
     "electron-packager": "^17.1.1"
   },
   "dependencies": {

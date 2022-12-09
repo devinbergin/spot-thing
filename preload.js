@@ -61,9 +61,19 @@ window.addEventListener('DOMContentLoaded', () => {
 		debug && console.log("accessToken:", accessToken);
 		debug && console.log("refreshToken:", refreshToken);
 
-		// TODO: Reauthorize with the tokens we got
+		// Reauthorize with the tokens we have stored
+		spotifyApi = new SpotifyWebApi();
+		spotifyApi.setAccessToken(accessToken);
+		spotifyApi.setRefreshToken(refreshToken);
 		
+		// Start the intervals
+		startIntervals(refreshToken);
 
+		// Hide the forms
+		$('#idSecret').hide();
+		$('#urlCode').hide();
+
+		// TODO - show a loading message
 
 	});
 
@@ -134,6 +144,25 @@ window.addEventListener('DOMContentLoaded', () => {
 		// The code that's returned as a query parameter to the redirect URI
 		var code = authCode;
 
+		// Create json array for secrets
+		var clientSecrets = {
+			clientID: $('#clientIDInput').val(),
+			clientSecret: $('#clientSecretInput').val(),
+			redirectURI: $('#redirectInput').val(),
+			code: code
+		};
+
+		// Store the secrets for later
+		var clientSecretsString = JSON.stringify(clientSecrets);
+		var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+		
+		if (!fs.existsSync(path)){
+			fs.mkdirSync(path);
+			fs.writeFileSync(path+'clientSecrets.json',clientSecretsString);
+		} else {
+			fs.writeFileSync(path+'clientSecrets.json',clientSecretsString);
+		}
+
 		// Call the authorize function below and pass the code over
 		authorizeSpot(code);
 
@@ -147,7 +176,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		$('#about').hide();
 	});	
 
-	function authorizeSpot(code) {
+	function authorizeSpot(code) {		
 		// Get the clientSecret again because it gets lost on its way here
 		clientSecret = $('#clientSecretInput').val();
 		

@@ -133,8 +133,8 @@ window.addEventListener('DOMContentLoaded', () => {
 			$('#idSecret').hide();
 			$('#urlCode').hide();
 
-			// TODO - show a loading message
-			
+			// Show a loading message while we get data back from the API
+			$('#loading').show();
 
 		});
 	});
@@ -199,8 +199,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		debug && console.log('callbackURLString: ' + callbackURLString);
 		debug && console.log('queryStringVal: ' + queryStringVal);
 		debug && console.log('parsed: ' + parsed.code);
-		
-		//debug && console.log(JSON.stringify('parsedURL: '+callbackURL));
 		debug && console.log('authCode: ' + authCode);
 		
 		// The code that's returned as a query parameter to the redirect URI
@@ -230,7 +228,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		// Hide the second form
 		$('#urlCode').hide();
-
 	});	
 
 	function authorizeSpot(code) {		
@@ -244,16 +241,16 @@ window.addEventListener('DOMContentLoaded', () => {
 			redirectUri: redirectURI
 		};
 
-		debug && console.log(JSON.stringify(credentials));
+		debug && console.log('credentials: ' + JSON.stringify(credentials));
 
 		spotifyApi = new SpotifyWebApi(credentials);
 		
 		// Retrieve an access token and a refresh token
 		spotifyApi.authorizationCodeGrant(code).then(
 			function(data) {
-				debug && console.log('The token expires in ' + data.body['expires_in']);
-				debug && console.log('The access token is ' + data.body['access_token']);
-				debug && console.log('The refresh token is ' + data.body['refresh_token']);
+				debug && console.log('The token expires in: ' + data.body['expires_in']);
+				debug && console.log('The access token is: ' + data.body['access_token']);
+				debug && console.log('The refresh token is: ' + data.body['refresh_token']);
 	
 				// Set the access token on the API object to use it in later calls
 				spotifyApi.setAccessToken(data.body['access_token']);
@@ -299,7 +296,10 @@ window.addEventListener('DOMContentLoaded', () => {
 					debug && console.log('currentlyPlaying.length: ' + currentlyPlaying.length);
 
 					if (currentlyPlaying.length < 3) {
-						debug && console.log('Nothing currently playing.')
+						debug && console.log('Nothing currently playing.');
+
+						// Hide the loading overlay
+						$('#loading').hide();
 
 						// Nothing is playing so restart the loop from the top until it is
 						$('#nothingPlaying').show();
@@ -308,6 +308,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 					// Hide the nothing playing overlay once we find activity
 					$('#nothingPlaying').hide();
+
+					// Hide the loading overlay
+					$('#loading').hide();
 					
 					debug && console.log('Now playing track: ' + data.body.item.name);
 					debug && console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
@@ -333,6 +336,7 @@ window.addEventListener('DOMContentLoaded', () => {
 							$('.controls').css('background',shader(color.hex, -.4));
 							$('.progress').css('background-color',shader(color.hex, -.6));
 
+							// Set the colors for the menu and dropdown items
 							$('.window-title').css('background',shader(color.hex, -.1));
 							$('.window-title').hover(
 								function () {
@@ -361,8 +365,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 					// Set all the info of the currently playing track
 					$('#songName').text(data.body.item.name);
+					$('#songName').attr('title',data.body.item.name);
 					$('#artistName').text(data.body.item.artists[0].name);
+					$('#artistName').attr('title',data.body.item.artists[0].name);
 					$('#albumName').text(data.body.item.album.name);
+					$('#albumName').attr('title',data.body.item.album.name);
 					$('#albumArt').attr('src',data.body.item.album.images[0].url);
 					$('#albumURL').val(data.body.item.album.external_urls.spotify);
 					$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);

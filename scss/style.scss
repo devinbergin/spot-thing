@@ -177,14 +177,16 @@
 			max-width:65%;
 		
 			.albumName {
-				font-size:14px;
-				color:lighten($purple,30%);
+				font-size:13px;
+				color:$white;
 				display: -webkit-box;
 				-webkit-line-clamp: 1;
 				-webkit-box-orient: vertical;
 				overflow:hidden;
-				max-width:215px;
+				max-width:320px;
 				cursor:pointer;
+				opacity:.8;
+				text-transform:uppercase;
 			}
 		
 			.artistName {

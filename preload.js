@@ -43,16 +43,16 @@ window.addEventListener('DOMContentLoaded', () => {
 	var spotifyApi;
 
 	// Check if the clientData.json already exists
-	// TODO - Seems like these tokens expire after some time so need to handle that gracefully and show forms for now
-	var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\clientData.json';
-	fs.readFile(path, "utf8", (err, clientData) => {
+	// If found, we refresh the access token and then run the normal startIntervals
+	var pathData = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\clientData.json';
+	fs.readFile(pathData, "utf8", (err, clientData) => {
 		if (err) {
 			// No file found, do nothing
 			debug && console.log("File read failed:", err);
 			return;
 		}
 
-		// We found the file, now get the secrets
+		// We found the file, now get the data
 		var clientDataArray = JSON.parse(clientData);
 		var accessToken = clientDataArray.accessToken;
 		var refreshToken = clientDataArray.refreshToken;
@@ -62,20 +62,81 @@ window.addEventListener('DOMContentLoaded', () => {
 		debug && console.log("accessToken:", accessToken);
 		debug && console.log("refreshToken:", refreshToken);
 
-		// Reauthorize with the tokens we have stored
-		spotifyApi = new SpotifyWebApi();
-		spotifyApi.setAccessToken(accessToken);
-		spotifyApi.setRefreshToken(refreshToken);
-		
-		// Start the intervals
-		startIntervals(refreshToken);
+		// Get the secrets from the clientSecrets file
+		var pathSecrets = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\clientSecrets.json';
+		fs.readFile(pathSecrets, "utf8", (err, clientSecrets) => {
+			if (err) {
+				// No file found, do nothing
+				debug && console.log("File read failed:", err);
+				return;
+			}
 
-		// Hide the forms
-		$('#idSecret').hide();
-		$('#urlCode').hide();
+			// We found the file, now get the secrets
+			var clientSecretsArray = JSON.parse(clientSecrets);
+			var clientID = clientSecretsArray.clientID;
+			var clientSecret = clientSecretsArray.clientSecret;
+			var redirectURI = clientSecretsArray.redirectURI;
 
-		// TODO - show a loading message
+			debug && console.log("File data:", clientSecrets);
+			debug && console.log("clientSecretsArray:", clientSecretsArray);
+			debug && console.log("clientID:", clientID);
+			debug && console.log("clientSecret:", clientSecret);
+			debug && console.log("redirectURI:", redirectURI);
 
+			// Set credentials to pass over
+			var credentials = {
+				clientId: clientID,
+				clientSecret: clientSecret,
+				redirectUri: redirectURI
+			};
+
+			debug && console.log(JSON.stringify(credentials));
+
+			spotifyApi = new SpotifyWebApi(credentials);
+			spotifyApi.setAccessToken(accessToken);
+			spotifyApi.setRefreshToken(refreshToken);
+
+			// Refresh the access token that we found
+			spotifyApi.refreshAccessToken().then(
+				function(data) {
+					debug && console.log('The access token has been refreshed!');
+			
+					// Save the access token so that it's used in future calls
+					spotifyApi.setAccessToken(data.body['access_token']);
+
+					// Setup json array to save secrets locally for later
+					var clientData = {
+						accessToken: data.body['access_token'],
+						refreshToken: refreshToken
+					};
+
+					// Write client data to json file
+					var clientDataString = JSON.stringify(clientData);
+					var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+					
+					if (!fs.existsSync(path)){
+						fs.mkdirSync(path);
+						fs.writeFileSync(path+'clientData.json',clientDataString);
+					} else {
+						fs.writeFileSync(path+'clientData.json',clientDataString);
+					}
+
+					// Start the intervals
+					startIntervals(refreshToken);
+				},
+				function(err) {
+					debug && console.log('Could not refresh access token', err);
+				}
+			);
+
+			// Hide the forms
+			$('#idSecret').hide();
+			$('#urlCode').hide();
+
+			// TODO - show a loading message
+			
+
+		});
 	});
 
 	// First form
@@ -170,11 +231,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		// Hide the second form
 		$('#urlCode').hide();
 
-	});
-
-	// Close about overlay
-	$('#aboutClose').click(function() {
-		$('#about').hide();
 	});	
 
 	function authorizeSpot(code) {		
@@ -237,6 +293,22 @@ window.addEventListener('DOMContentLoaded', () => {
 			// Get the User's Currently Playing Track 
 			spotifyApi.getMyCurrentPlaybackState()
 				.then(function(data) {
+					// Full API Response
+					var currentlyPlaying = JSON.stringify(data.body);
+					debug && console.log('currentlyPlaying: ' + currentlyPlaying);
+					debug && console.log('currentlyPlaying.length: ' + currentlyPlaying.length);
+
+					if (currentlyPlaying.length < 3) {
+						debug && console.log('Nothing currently playing.')
+
+						// Nothing is playing so restart the loop from the top until it is
+						$('#nothingPlaying').show();
+						return;
+					}
+
+					// Hide the nothing playing overlay once we find activity
+					$('#nothingPlaying').hide();
+					
 					debug && console.log('Now playing track: ' + data.body.item.name);
 					debug && console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
 					debug && console.log('Now playing album: ' + data.body.item.album.name);
@@ -248,9 +320,6 @@ window.addEventListener('DOMContentLoaded', () => {
 					debug && console.log('Is Playing (t/f): ' + data.body.is_playing);
 					debug && console.log('Shuffle State (t/f): ' + data.body.shuffle_state);
 
-					// Full API Response
-					debug && console.log('Now playing: ' + JSON.stringify(data.body));
-
 					// Get album artwork color
 					var url = data.body.item.album.images[0].url;
 					request({ url, encoding: null }, (err, resp, buffer) => {
@@ -258,7 +327,6 @@ window.addEventListener('DOMContentLoaded', () => {
 							debug && console.log('Album Color: '+color.hex);
 
 							// Set the UI colors from the album artwork
-							// TODO - set other random elements
 							$('.titlebar').css('background',shader(color.hex, -.1));
 							$('.dropdown-menu').css('background-color',shader(color.hex, -.1));
 							$('.info').css('background',shader(color.hex, -.1));
@@ -333,26 +401,25 @@ window.addEventListener('DOMContentLoaded', () => {
 				function(data) {
 					debug && console.log('The access token has been refreshed!');
 			
-				// Save the access token so that it's used in future calls
-				spotifyApi.setAccessToken(data.body['access_token']);
+					// Save the access token so that it's used in future calls
+					spotifyApi.setAccessToken(data.body['access_token']);
 
-				// Setup json array to save secrets locally for later
-				var clientData = {
-					accessToken: data.body['access_token'],
-					refreshToken: refreshToken
-				};
+					// Setup json array to save secrets locally for later
+					var clientData = {
+						accessToken: data.body['access_token'],
+						refreshToken: refreshToken
+					};
 
-				// Write client data to json file
-				var clientDataString = JSON.stringify(clientData);
-				var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
-				
-				if (!fs.existsSync(path)){
-					fs.mkdirSync(path);
-					fs.writeFileSync(path+'clientData.json',clientDataString);
-				} else {
-					fs.writeFileSync(path+'clientData.json',clientDataString);
-				}
-
+					// Write client data to json file
+					var clientDataString = JSON.stringify(clientData);
+					var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+					
+					if (!fs.existsSync(path)){
+						fs.mkdirSync(path);
+						fs.writeFileSync(path+'clientData.json',clientDataString);
+					} else {
+						fs.writeFileSync(path+'clientData.json',clientDataString);
+					}
 				},
 				function(err) {
 					debug && console.log('Could not refresh access token', err);
@@ -400,7 +467,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	// TODO: if you leave it paused for long enough (10 min ish) then you can't click play I think because of the no active device response
 	$("body").on("click", "#play", function(){
 		// Start/Resume a User's Playback 
 		spotifyApi.play()
@@ -413,8 +479,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	// TODO: when you click next, get the currently playing info and update it in the UI
-	// TODO: when you click next if we are paused we need to update the play icon so the user can pause since moving to the next song auto plays
 	$("#nextSong").click(function() {
 		// Skip User’s Playback To Next Track
 		spotifyApi.skipToNext()
@@ -426,8 +490,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	// TODO: when you click back, get the currently playing info and update it in the UI
-	// TODO: when you click back if we are paused we need to update the play icon so the user can pause since moving to the back song auto plays
 	$("#backSong").click(function() {
 		// Skip User’s Playback To Previous Track 
 		spotifyApi.skipToPrevious()
@@ -459,14 +521,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Open Album in browser window
 	$("#albumArt").click(function() {
-		if (debug) {
-			// Clear both intervals - for debugging only
-			clearInterval(intervalInfo);
-			clearInterval(intervalRefresh);
-		} else {
-			var albumURL = $('#albumURL').val();
-			open(albumURL);
-		}
+		var albumURL = $('#albumURL').val();
+		open(albumURL);
 	});
 
 	// Dropdown Menu
@@ -477,6 +533,16 @@ window.addEventListener('DOMContentLoaded', () => {
 	// About Link
 	$('#aboutLink').click(function() {
 		$('#about').show();
+	});
+
+	// Close about overlay
+	$('#aboutClose').click(function() {
+		$('#about').hide();
+	});
+
+	// Bounce them to the main player on the web
+	$('#nothingPlayingBtn').click(function() {
+		open('https://open.spotify.com/');
 	});
 
 	// Bug Report Link
@@ -495,6 +561,3 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
   
 });
-
-
-

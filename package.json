@@ -18,7 +18,7 @@
 		"electron-builder": "^23.6.0"
   },
   "dependencies": {
-    "electron": "^19.0.9",
+    "electron": "^22.0.2",
 		"@fortawesome/fontawesome-free": "^6.2.1",
     "bootstrap": "^5.2.2",
     "fast-average-color-node": "^2.4.0",

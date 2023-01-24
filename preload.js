@@ -29,7 +29,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const request = require('request');
 	const shader = require('shader');
 
-	// For getting the local username
+	// For getting the local username - TODO dont need this pkg anymore
 	const os = require ('os');
 	const username = os.userInfo ().username;
 	
@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Check if the clientData.json already exists
 	// If found, we refresh the access token and then run the normal startIntervals
-	var pathData = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\clientData.json';
+	var pathData = 'C:\\ProgramData\\spot-thing\\clientData.json';
 	fs.readFile(pathData, "utf8", (err, clientData) => {
 		if (err) {
 			// No file found, do nothing
@@ -63,7 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		debug && console.log("refreshToken:", refreshToken);
 
 		// Get the secrets from the clientSecrets file
-		var pathSecrets = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\clientSecrets.json';
+		var pathSecrets = 'C:\\ProgramData\\spot-thing\\clientSecrets.json';
 		fs.readFile(pathSecrets, "utf8", (err, clientSecrets) => {
 			if (err) {
 				// No file found, do nothing
@@ -213,9 +213,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		};
 
 		// Store the secrets for later
-		// TODO this throws an error on Dracarys 
 		var clientSecretsString = JSON.stringify(clientSecrets);
-		var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+		var path = 'C:\\ProgramData\\spot-thing\\';
 		
 		if (!fs.existsSync(path)){
 			fs.mkdirSync(path);
@@ -265,7 +264,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 				// Write client data to json file
 				var clientDataString = JSON.stringify(clientData);
-				var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+				var path = 'C:\\ProgramData\\spot-thing\\';
 				
 				if (!fs.existsSync(path)){
 					fs.mkdirSync(path);
@@ -421,7 +420,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 					// Write client data to json file
 					var clientDataString = JSON.stringify(clientData);
-					var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+					var path = 'C:\\ProgramData\\spot-thing\\';
 					
 					if (!fs.existsSync(path)){
 						fs.mkdirSync(path);

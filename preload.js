@@ -112,7 +112,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 					// Write client data to json file
 					var clientDataString = JSON.stringify(clientData);
-					var path = 'C:\\Users\\'+username+'\\AppData\\Local\\spot-thing\\';
+					var path = 'C:\\ProgramData\\spot-thing\\';
 					
 					if (!fs.existsSync(path)){
 						fs.mkdirSync(path);

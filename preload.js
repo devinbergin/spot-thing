@@ -28,10 +28,6 @@ window.addEventListener('DOMContentLoaded', () => {
 	const color = require('fast-average-color-node');
 	const request = require('request');
 	const shader = require('shader');
-
-	// For getting the local username - TODO dont need this pkg anymore
-	const os = require ('os');
-	const username = os.userInfo ().username;
 	
 	// Declare user input variables
 	var clientID;
@@ -333,8 +329,7 @@ window.addEventListener('DOMContentLoaded', () => {
 							$('.titlebar').css('background',shader(color.hex, -.1));
 							$('.dropdown-menu').css('background-color',shader(color.hex, -.1));
 							$('.info').css('background',shader(color.hex, -.1));
-							$('#controlsDefault.controls').css('background',shader(color.hex, -.4));
-							$('#controlsAlt.controls').css('background',shader(color.hex, -.1));
+							$('.controls').css('background',shader(color.hex, -.4));
 							$('.progress').css('background-color',shader(color.hex, -.6));
 
 							// Set the colors for the menu and dropdown items
@@ -561,48 +556,6 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Tip Link
 	$('#tipLink').click(function() {
 		open('https://www.buymeacoffee.com/devinbergin');
-	});
-
-	// Alternate Layout
-	$('#altLayout').click(function() {
-		var currentLayout = $('#currLayout').val();
-
-		if (currentLayout == 'default') {
-			// Set the input to alt layout first
-			$('#currLayout').val('alt');
-
-			// Resize the main window
-			window.resizeTo(1200,200);
-
-			// Change classes to realign everything
-			$('.albumContainer').addClass('albumContainerAlt');
-			$('.spot-thing .info').addClass('infoAlt');
-			$('#controlsAlt').addClass('controlsAlt');
-
-			$('.songContainer').removeClass('col-7');
-			$('.albumContainer').removeClass('col-5');
-			$('.songContainer').addClass('col-5');
-			$('.albumContainer').addClass('col-3');
-
-			// Show alt progress and controls
-			$('#progressDefault').hide();
-			$('#progressAlt').show();
-
-			$('#controlsDefault').hide();
-			$('#controlsAlt').show();
-
-
-		} else {
-			// Set the input to default layout first
-			$('#currLayout').val('default');
-
-			// Resize the main window
-			window.resizeTo(500,275);
-
-
-		}
-
-
 	});
 
 	// Close the app

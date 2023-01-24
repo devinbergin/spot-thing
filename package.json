@@ -15,10 +15,10 @@
   "author": "Devin Bergin",
   "license": "CC0-1.0",
   "devDependencies": {
-		"electron-builder": "^23.6.0"
+		"electron-builder": "^23.6.0",
+		"electron": "^19.0.9"
   },
   "dependencies": {
-    "electron": "^19.0.9",
 		"@fortawesome/fontawesome-free": "^6.2.1",
     "bootstrap": "^5.2.2",
     "fast-average-color-node": "^2.4.0",
@@ -33,8 +33,10 @@
   },
   "build": {
 		"appId": "spot-thing",
+    "copyright":"Copyright © 2022 Devin Bergin",
 		"win": {
-			"target": "portable"
+			"target": "portable",
+      "icon":"build/icon.ico"
 		}
 	}
 }

@@ -215,6 +215,10 @@
 		}
 	}
 
+	.infoAlt {
+		height: 100% !important;
+	}
+
 	.progressContainer {
 		height:5px;
 
@@ -267,7 +271,23 @@
 		}
 	}
 
-	
+	.controlsAlt {
+		display:flex;
+	}
+
+	.albumContainerAlt {
+		max-width:16% !important;
+		margin-left:-3% !important;
+	}
+
+	#progressAlt {
+		padding-left: 15px;
+    	padding-top: 15px;
+
+		.progress {
+			border-radius:10px;
+		}
+	}
 }
 
 

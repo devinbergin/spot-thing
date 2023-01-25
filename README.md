@@ -12,10 +12,7 @@
   <p align="center">
     A small player for spotify.
     <br />
-    <a href="https://github.com/devinbergin/spot-thing"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/devinbergin/spot-thing">View Demo</a>
+    <a href="https://github.com/devinbergin/spot-thing/blob/main/images/spot-thing.gif?raw=true" target="_blank">View Demo</a>
     ·
     <a href="https://github.com/devinbergin/spot-thing/issues">Report Bug</a>
     ·
@@ -61,6 +58,9 @@
 </p>
 
 I built spot-thing to be the spotify mini player experience on desktop that I always wanted. I tried several that are available and none really hit the mark for me. I saw the release of Car Thing and it looked like the perfect UI for a mini player. Debated grabbing one and popping it on my desk but instead, I decided to dive into my first Electron/Node JS application and build it myself. Which only took over a year because of my hobby fixations. **IMPORTANT: Full functionality within spot-thing requires a spotify premium account**
+<br>
+<br>
+Want to support me and spot-thing? [Buy Me A Coffee](https://www.buymeacoffee.com/devinbergin)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

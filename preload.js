@@ -1,12 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
   	
 	// Set to 1 to turn on console logging
-	var debug = 1;
-
-	// Notes for testing
-	// clientID: cda49a979d894afaaa13b9975b773cf9
-	// clientSecret: d88c8c755c3d471c8c7de6db709c21df
-	// redirectURI: http://localhost:8888/callback
+	var debug = 0;
 
 	// jquery
 	const $ = require('jquery');

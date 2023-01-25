@@ -33,6 +33,11 @@
 				padding-left:10px;
 				width:125px;
 
+				.title-logo {
+					width:20px;
+					margin-right: 5px;
+				}
+
 				&:hover {
 					background:darken($light-purple,5%);
 					width:125px;

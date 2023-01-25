@@ -22,7 +22,7 @@ function createWindow () {
   	mainWindow.loadFile('spot-thing.html')
 
   	// Open the DevTools.
-  	mainWindow.webContents.openDevTools()
+  	//mainWindow.webContents.openDevTools()
   
 	// Don't allow drag to resize window
   	//mainWindow.setResizable(false)

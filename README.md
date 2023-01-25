@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/devinbergin/spot-thing">
-    <img src="images/spot-thing-logos_transparent.png" alt="Logo" width="400">
+    <img src="images/logo.png" alt="Logo" width="250">
   </a>
 
 <h3 align="center">spot-thing</h3>

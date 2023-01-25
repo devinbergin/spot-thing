@@ -98,10 +98,7 @@ To use spot-thing version 1, you need to setup your spotify developer account wi
 <p align="center">
   <img height="400" src="setup/user-setup-3.png">
 </p>
-5. Scroll down to where it says URI Redirects and copy and paste the URL below into the box. MAKE SURE TO CLICK ADD TO THE RIGHT OF THE FIELD. Then click save at the bottom. 
-  ```sh
-   http://localhost:8888/callback
-  ```
+5. Scroll down to where it says URI Redirects and copy and paste the following URL into the box. MAKE SURE TO CLICK ADD TO THE RIGHT OF THE FIELD. Then click save at the bottom. http://localhost:8888/callback
 <p align="center">
   <img height="400" src="setup/user-setup-4.png">
 </p>

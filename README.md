@@ -77,7 +77,7 @@ I built spot-thing to be the spotify mini player experience on desktop that I al
 
 <!-- -->
 ## For Users
-**spot-thing is free to use! You can download the latest version [here](https://github.com/devinbergin/spot-thing/blob/main/spot-thing%201.0.0.exe).**
+**spot-thing is free to use! You can download the latest version [here](https://github.com/devinbergin/spot-thing/releases/download/v1/spot-thing.1.0.0.exe).**
 
 After downloading the .exe file, place it somewhere you can access in the future, this is how you'll open spot-thing (or you can make a shortcut). Then follow the steps below.
 

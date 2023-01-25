@@ -137,11 +137,7 @@ To get a local copy up and running follow these steps.
 
 ### Setup
 
-To utilize the app you will need to create a Spotify App inside your Spotify Developer Dashboard. 
-
-1. Visit xxx
-2. Click here
-3. Click there
+To utilize the app you will need to create a Spotify App inside your Spotify Developer Dashboard. Follow the steps above for users.
 
 
 ### Installation

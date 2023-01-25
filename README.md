@@ -57,14 +57,12 @@
 ## About The Project
 
 <p align="center">
-  <img src="images/currentUI.png">
+  <img src="images/spot-thing.gif">
 </p>
 
-I built spot-thing to be the spotify mini player experience on desktop that I always wanted. I tried several that are available and none really hit the mark for me. I saw the release of Car Thing and it looked like the perfect UI for a mini player. Debated grabbing one and popping it on my desk but instead, I decided to dive into my first Electron/Node JS application and build it myself. 
+I built spot-thing to be the spotify mini player experience on desktop that I always wanted. I tried several that are available and none really hit the mark for me. I saw the release of Car Thing and it looked like the perfect UI for a mini player. Debated grabbing one and popping it on my desk but instead, I decided to dive into my first Electron/Node JS application and build it myself. Which only took over a year because of my hobby fixations.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built With
 
@@ -77,10 +75,57 @@ I built spot-thing to be the spotify mini player experience on desktop that I al
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<!-- -->
+## For Users
+**spot-thing is free to use! You can download the latest version [here](https://github.com/devinbergin/spot-thing/blob/main/spot-thing%201.0.0.exe).**
 
+After downloading the .exe file, place it somewhere you can access in the future, this is how you'll open spot-thing (or you can make a shortcut). Then follow the steps below.
+
+### Getting Setup
+
+To use spot-thing version 1, you need to setup your spotify developer account with a customer app. This will allow spot-thing to read information from your Spotify account.
+
+1. Visit the Spotify Developer Dashboard below and login - [Spotfy Developer Dashboard](https://developer.spotify.com/dashboard/)
+2. After logging in click the Create An App button in the top right corner
+<p align="center">
+  <img height="400" src="setup/user-setup-1.png">
+</p>
+3. In the window that opens, fill in the App Name (spot-thing) and App Description (something you choose) and click Create.
+<p align="center">
+  <img height="400" src="setup/user-setup-2.png">
+</p>
+4. The next page is the main area for your new app! Click the Edit Settings button in the upper right.
+<p align="center">
+  <img height="400" src="setup/user-setup-3.png">
+</p>
+5. Scroll down to where it says URI Redirects and copy and paste the URL below into the box. MAKE SURE TO CLICK ADD TO THE RIGHT OF THE FIELD. Then click save at the bottom. 
+  ```sh
+   http://localhost:8888/callback
+  ```
+<p align="center">
+  <img height="400" src="setup/user-setup-4.png">
+</p>
+6. Now return to the main dashboard for your new app. In the upper left click to SHOW CLIENT SECRET and copy the Client ID and Client Secret. You will need these when you first open spot-thing. You shouldn't need them again as spot-thing will save them for you, but you can always access them in this dashboard in the future. 
+<p align="center">
+  <img height="300" src="setup/user-setup-5.png">
+</p>
+7. Now open spot-thing! 
+8. You'll be prompted to enter your Client ID and Client Secret, then click Next. 
+<p align="center">
+  <img height="250" src="setup/user-setup-6.png">
+</p>
+9. When you click next, spot-thing will attempt to automatically open an authorization URL for you in your browser. This page is where you accept the permissions that spot-thing needs to read and control your playback details.
+<p align="center">
+  <img height="500" src="setup/user-setup-7.png">
+</p>
+10. After you click AGREE, you will be redirected to a blank page with a URL that begins with "http://localhost:8888/callback?code=" followed by a very long string. Copy the ENTIRE URL and paste it into spot-thing and click activate.
+<p align="center">
+  <img height="250" src="setup/user-setup-8.png">
+</p>
+11. You're done! If you have music currently playing on your spotify account you'll see spot-thing snap into action. If you don't have anything playing, you'll see a message from spot-thing to begin playing music on your main spotify app. spot-thing automatically stays connected to your account so you can close/open it as you need and you won't have to enter those details again. If for some reason it prompts you for the ID and Secret, just follow steps 8-11 again. 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## For Developers
 
 To get a local copy up and running follow these steps.
 
@@ -121,7 +166,6 @@ To utilize the app you will need to create a Spotify App inside your Spotify Dev
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- USAGE EXAMPLES -->

@@ -77,7 +77,7 @@ Want to support me and spot-thing? [Buy Me A Coffee](https://www.buymeacoffee.co
 
 <!-- -->
 ## For Users
-**spot-thing is free to use! You can download the latest version [here](https://github.com/devinbergin/spot-thing/releases/download/v1/spot-thing.1.0.0.exe).**
+**spot-thing is free to use! You can download the latest version [here](https://github.com/devinbergin/spot-thing/releases/latest).**
 
 After downloading the .exe file, place it somewhere you can access in the future, this is how you'll open spot-thing (or you can make a shortcut). Then follow the steps below.
 

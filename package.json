@@ -15,7 +15,7 @@
   "author": "Devin Bergin",
   "license": "CC0-1.0",
   "devDependencies": {
-		"electron-builder": "^23.6.0",
+		"electron-builder": "^24.4.0",
 		"electron": "^23.1.4"
   },
   "dependencies": {

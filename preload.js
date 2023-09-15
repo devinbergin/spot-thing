@@ -177,7 +177,6 @@ window.addEventListener('DOMContentLoaded', () => {
 	$("#urlCodeActivate").click(function() {
 		// Get the clientSecret again because it gets lost on its way here
 		clientSecret = $('#clientSecretInput').val();
-
 		callbackURL = $('#callbackURL').val();
 		
 		// Parse the URL to find the code value
@@ -536,6 +535,40 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Close about overlay
 	$('#aboutClose').click(function() {
 		$('#about').hide();
+	});
+
+	// Show reset config popup
+	$('#resetConfig').click(function() {
+		$('#config').show();
+	});
+
+	// Show reset config from loading
+	$('#configBtnLoading').click(function() {
+		$('#config').show();
+	});
+
+	// Close config overlay
+	$('#configClose').click(function() {
+		$('#config').hide();
+	});
+
+	// Reset Config button to erase their setup and let them start fresh
+	$('#configConfirm').click(function() {
+		debug && console.log('Removing configuration files.')
+
+		var clientSecretPath = 'C:\\ProgramData\\spot-thing\\clientSecrets.json';
+		fs.unlink(clientSecretPath, function(err){
+			if (err) return console.log(err);
+			debug && console.log('clientSecrets.json was deleted successfully.');
+	   	});
+
+		var clientDataPath = 'C:\\ProgramData\\spot-thing\\clientData.json';
+		fs.unlink(clientDataPath, function(err){
+			if (err) return console.log(err);
+			debug && console.log('clientData.json was deleted successfully.');
+	   	});
+
+		location.reload();
 	});
 
 	// Bounce them to the main player on the web

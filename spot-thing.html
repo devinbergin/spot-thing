@@ -23,6 +23,7 @@
 
 						<div class="dropdown-menu" aria-labelledby="menu">
 							<a class="dropdown-item" id="aboutLink">About</a>
+							<a class="dropdown-item" id="resetConfig">Reset spot-thing</a>
 						  	<a class="dropdown-item" id="bugLink">Report bug</a>
 						  	<a class="dropdown-item" id="tipLink">Buy me a coffee</a>
 						</div>
@@ -128,10 +129,27 @@
 						<br>
 						created by Devin Bergin
 					</div>
-					<div class="row mt-4 mx-auto">
-						<div class="col-12" align="center">
-							<button id="aboutClose" type="button" class="btn btn-primary">Close</button>
-						</div>
+				</div>
+				<div class="row mt-4 mx-auto">
+					<div class="col-12" align="center">
+						<button id="aboutClose" type="button" class="btn btn-primary">Close</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- About Overlay -->
+			<div id="config" class="overlay" style="display:none;">
+				<div class="row mt-3" align="center">
+					<div class="col-12 about mt-2">
+						Warning! Resetting spot-thing will erase all saved Spotify API information. Click the button below to confirm this action.
+					</div>
+				</div>
+				<div class="row mt-4 mx-auto">
+					<div class="col-6" align="center">
+						<button id="configClose" type="button" class="btn btn-secondary">Cancel</button>
+					</div>
+					<div class="col-6" align="center">
+						<button id="configConfirm" type="button" class="btn btn-danger">Reset</button>
 					</div>
 				</div>
 			</div>
@@ -143,10 +161,10 @@
 						Nothing is currently playing. Start playing music from your main Spotify player.
 						<br>
 					</div>
-					<div class="row mt-4 mx-auto">
-						<div class="col-12" align="center">
-							<button id="nothingPlayingBtn" type="button" class="btn btn-primary">Open Main Player</button>
-						</div>
+				</div>
+				<div class="row mt-4 mx-auto">
+					<div class="col-12" align="center">
+						<button id="nothingPlayingBtn" type="button" class="btn btn-primary">Open Main Player</button>
 					</div>
 				</div>
 			</div>
@@ -158,10 +176,15 @@
 						Connected! Looking for Spotify activity...
 						<br>
 					</div>
-					<div class="row mt-4 mx-auto">
-						<div class="col-12 fa-3x" align="center">
-							<i class="fas fa-spinner fa-pulse"></i>
-						</div>
+				</div>
+				<div class="row mt-4 mx-auto">
+					<div class="col-12 fa-2x" align="center">
+						<i class="fas fa-spinner fa-pulse"></i>
+					</div>
+				</div>
+				<div class="row mt-4 mx-auto">
+					<div class="col-12" align="center">
+						<button id="configBtnLoading" type="button" class="btn btn-danger">Reset</button>
 					</div>
 				</div>
 			</div>

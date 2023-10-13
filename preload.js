@@ -3,6 +3,8 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Set to 1 to turn on console logging
 	var debug = 0;
 
+	const ipc = window.require('electron').ipcRenderer;
+
 	// jquery
 	const $ = require('jquery');
 	window.jQuery = window.$ = $;
@@ -10,8 +12,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Spotify api
 	const SpotifyWebApi = require('spotify-web-api-node');
 
-	// filesystem for writing client data to json
-	const fs = require('fs');
+	// For storing client data
+	const Store = require('electron-store');
+	const store = new Store();
 
 	// Open for sending URL to default browser
 	const open = require('open');
@@ -28,107 +31,58 @@ window.addEventListener('DOMContentLoaded', () => {
 	var clientID;
 	var clientSecret;
 	var redirectURI;
-	var callbackURL;
 
 	// Declare some globals
 	var spotifyApi;
 
-	// Check if the clientData.json already exists
-	// If found, we refresh the access token and then run the normal startIntervals
-	var pathData = 'C:\\ProgramData\\spot-thing\\clientData.json';
-	fs.readFile(pathData, "utf8", (err, clientData) => {
-		if (err) {
-			// No file found, do nothing
-			debug && console.log("File read failed:", err);
-			return;
-		}
+	// Check if the config.json already exists with the details we need in it
+	if (store.get('accessToken') && store.get('refreshToken')) {
+		// If found, we refresh the access token and then run the normal startIntervals
+		debug && console.log("accessToken:", store.get('accessToken'));
+		debug && console.log("refreshToken:", store.get('refreshToken'));
+		debug && console.log("clientID:", store.get('clientID'));
+		debug && console.log("clientSecret:", store.get('clientSecret'));
+		debug && console.log("redirectURI:", store.get('redirectURI'));
 
-		// We found the file, now get the data
-		var clientDataArray = JSON.parse(clientData);
-		var accessToken = clientDataArray.accessToken;
-		var refreshToken = clientDataArray.refreshToken;
+		// Set credentials to pass over
+		var credentials = {
+			clientId: store.get('clientID'),
+			clientSecret: store.get('clientSecret'),
+			redirectUri: store.get('redirectURI')
+		};
 
-		debug && console.log("File data:", clientData);
-		debug && console.log("clientDataArray:", clientDataArray);
-		debug && console.log("accessToken:", accessToken);
-		debug && console.log("refreshToken:", refreshToken);
+		debug && console.log('credentials: ' + JSON.stringify(credentials));
 
-		// Get the secrets from the clientSecrets file
-		var pathSecrets = 'C:\\ProgramData\\spot-thing\\clientSecrets.json';
-		fs.readFile(pathSecrets, "utf8", (err, clientSecrets) => {
-			if (err) {
-				// No file found, do nothing
-				debug && console.log("File read failed:", err);
-				return;
+		spotifyApi = new SpotifyWebApi(credentials);
+		spotifyApi.setAccessToken(store.get('accessToken'));
+		spotifyApi.setRefreshToken(store.get('refreshToken'));
+
+		// Refresh the access token that we found
+		spotifyApi.refreshAccessToken().then(
+			function(data) {
+				debug && console.log('The access token has been refreshed!');
+		
+				// Save the access token so that it's used in future calls
+				spotifyApi.setAccessToken(data.body['access_token']);
+
+				// Store the updated access token
+				store.set('accessToken', data.body['access_token'])
+
+				// Start the intervals
+				startIntervals(store.get('refreshToken'));
+			},
+			function(err) {
+				debug && console.log('Could not refresh access token', err);
 			}
+		);
 
-			// We found the file, now get the secrets
-			var clientSecretsArray = JSON.parse(clientSecrets);
-			var clientID = clientSecretsArray.clientID;
-			var clientSecret = clientSecretsArray.clientSecret;
-			var redirectURI = clientSecretsArray.redirectURI;
+		// Hide the forms
+		$('#idSecret').hide();
+		$('#urlCode').hide();
 
-			debug && console.log("File data:", clientSecrets);
-			debug && console.log("clientSecretsArray:", clientSecretsArray);
-			debug && console.log("clientID:", clientID);
-			debug && console.log("clientSecret:", clientSecret);
-			debug && console.log("redirectURI:", redirectURI);
-
-			// Set credentials to pass over
-			var credentials = {
-				clientId: clientID,
-				clientSecret: clientSecret,
-				redirectUri: redirectURI
-			};
-
-			debug && console.log(JSON.stringify(credentials));
-
-			spotifyApi = new SpotifyWebApi(credentials);
-			spotifyApi.setAccessToken(accessToken);
-			spotifyApi.setRefreshToken(refreshToken);
-
-			// Refresh the access token that we found
-			spotifyApi.refreshAccessToken().then(
-				function(data) {
-					debug && console.log('The access token has been refreshed!');
-			
-					// Save the access token so that it's used in future calls
-					spotifyApi.setAccessToken(data.body['access_token']);
-
-					// Setup json array to save secrets locally for later
-					var clientData = {
-						accessToken: data.body['access_token'],
-						refreshToken: refreshToken
-					};
-
-					// Write client data to json file
-					var clientDataString = JSON.stringify(clientData);
-					var path = 'C:\\ProgramData\\spot-thing\\';
-					
-					if (!fs.existsSync(path)){
-						fs.mkdirSync(path);
-						fs.writeFileSync(path+'clientData.json',clientDataString);
-					} else {
-						fs.writeFileSync(path+'clientData.json',clientDataString);
-					}
-
-					// Start the intervals
-					startIntervals(refreshToken);
-				},
-				function(err) {
-					debug && console.log('Could not refresh access token', err);
-				}
-			);
-
-			// Hide the forms
-			$('#idSecret').hide();
-			$('#urlCode').hide();
-
-			// Show a loading message while we get data back from the API
-			$('#loading').show();
-
-		});
-	});
+		// Show a loading message while we get data back from the API
+		$('#loading').show();
+	};
 
 	// First form
 	$("#idSecretNext").click(function() {		
@@ -140,11 +94,16 @@ window.addEventListener('DOMContentLoaded', () => {
 			// Get the secrets
 			clientID = $('#clientIDInput').val();
 			clientSecret = $('#clientSecretInput').val();
-			redirectURI = $('#redirectInput').val();
+			redirectURI = 'http://localhost:8888/callback';
 
-			debug && console.log(clientID);
-			debug && console.log(clientSecret);
-			debug && console.log(redirectURI);
+			debug && console.log('storing clientID: ' + clientID);
+			debug && console.log('storing clientSecret: ' + clientSecret);
+			debug && console.log('storing redirectURI: ' + redirectURI);
+
+			// Store the secrets
+			store.set('clientID', clientID);
+			store.set('clientSecret', clientSecret);
+			store.set('redirectURI', redirectURI);
 
 			var scopes = ['user-read-currently-playing','user-read-playback-position','user-modify-playback-state','user-read-playback-state'],
 				redirectUri = redirectURI,
@@ -160,75 +119,53 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			// Create the authorization URL
 			var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
-
 			debug && console.log(authorizeURL);
-			debug && console.log('clientSecret'+clientSecret);
 
-			// Open the authorize URL for the user to accept and copy the callback url
-			open(authorizeURL);
+			// Send the authorization URL back to main.js to open in a new electron window
+			ipc.send('createAuthWindow', [authorizeURL]);
 
 			// Hide the first form and unhide the second one
 			$('#idSecret').hide();
-			$('#urlCode').show();
+			$('#loading').show();
+
+			// Check every 1s to see if we have set the authWindowURL from main.js
+			var waitForAuth = window.setInterval(function(){
+				if (store.get('authWindowURL')) {
+					// Stop checking and start activation process
+					clearInterval(waitForAuth);
+					urlCodeActivate();
+				}
+			}, 1000);
 		}
 	});
 
-	// second form
-	$("#urlCodeActivate").click(function() {
-		// Get the clientSecret again because it gets lost on its way here
-		clientSecret = $('#clientSecretInput').val();
-		callbackURL = $('#callbackURL').val();
-		
+	// Process the authWindowURL once it comes back from main.js
+	function urlCodeActivate() {		
 		// Parse the URL to find the code value
-		var callbackURLString = callbackURL.toString();
-		var queryStringVal = callbackURLString.split('?')[1]
+		var authWindowURL = store.get('authWindowURL')
+		var authWindowURLString = authWindowURL.toString();
+		var queryStringVal = authWindowURLString.split('?')[1]
 		var parsed = queryString.parse(queryStringVal);
 		var authCode = parsed.code;
 
-		debug && console.log('callbackURL: ' + callbackURL);
-		debug && console.log('callbackURLString: ' + callbackURLString);
+		debug && console.log('authWindowURL: ' + authWindowURL);
+		debug && console.log('authWindowURLString: ' + authWindowURLString);
 		debug && console.log('queryStringVal: ' + queryStringVal);
-		debug && console.log('parsed: ' + parsed.code);
 		debug && console.log('authCode: ' + authCode);
-		
-		// The code that's returned as a query parameter to the redirect URI
-		var code = authCode;
 
-		// Create json array for secrets
-		var clientSecrets = {
-			clientID: $('#clientIDInput').val(),
-			clientSecret: $('#clientSecretInput').val(),
-			redirectURI: $('#redirectInput').val(),
-			code: code
-		};
+		// Store the authCode 
+		store.set('authCode', authCode);
 
-		// Store the secrets for later
-		var clientSecretsString = JSON.stringify(clientSecrets);
-		var path = 'C:\\ProgramData\\spot-thing\\';
-		
-		if (!fs.existsSync(path)){
-			fs.mkdirSync(path);
-			fs.writeFileSync(path+'clientSecrets.json',clientSecretsString);
-		} else {
-			fs.writeFileSync(path+'clientSecrets.json',clientSecretsString);
-		}
+		// Call the authorize function below and pass the authCode over
+		authorizeSpot(authCode);
+	};	
 
-		// Call the authorize function below and pass the code over
-		authorizeSpot(code);
-
-		// Hide the second form
-		$('#urlCode').hide();
-	});	
-
-	function authorizeSpot(code) {		
-		// Get the clientSecret again because it gets lost on its way here
-		clientSecret = $('#clientSecretInput').val();
-		
+	function authorizeSpot(code) {				
 		// Set credentials to pass
 		var credentials = {
-			clientId: clientID,
-			clientSecret: clientSecret,
-			redirectUri: redirectURI
+			clientId: store.get('clientID'),
+			clientSecret: store.get('clientSecret'),
+			redirectUri: store.get('redirectURI')
 		};
 
 		debug && console.log('credentials: ' + JSON.stringify(credentials));
@@ -246,22 +183,9 @@ window.addEventListener('DOMContentLoaded', () => {
 				spotifyApi.setAccessToken(data.body['access_token']);
 				spotifyApi.setRefreshToken(data.body['refresh_token']);
 
-				// setup json array to save secrets locally for later
-				var clientData = {
-					accessToken: data.body['access_token'],
-					refreshToken: data.body['refresh_token']
-				};
-
-				// Write client data to json file
-				var clientDataString = JSON.stringify(clientData);
-				var path = 'C:\\ProgramData\\spot-thing\\';
-				
-				if (!fs.existsSync(path)){
-					fs.mkdirSync(path);
-					fs.writeFileSync(path+'clientData.json',clientDataString);
-				} else {
-					fs.writeFileSync(path+'clientData.json',clientDataString);
-				}
+				// Store the tokens
+				store.set('accessToken', data.body['access_token']);
+				store.set('refreshToken', data.body['refresh_token']);
 
 				// Since we are activated now we can start the intervals
 				startIntervals(data.body['refresh_token']);
@@ -401,22 +325,9 @@ window.addEventListener('DOMContentLoaded', () => {
 					// Save the access token so that it's used in future calls
 					spotifyApi.setAccessToken(data.body['access_token']);
 
-					// Setup json array to save secrets locally for later
-					var clientData = {
-						accessToken: data.body['access_token'],
-						refreshToken: refreshToken
-					};
-
-					// Write client data to json file
-					var clientDataString = JSON.stringify(clientData);
-					var path = 'C:\\ProgramData\\spot-thing\\';
-					
-					if (!fs.existsSync(path)){
-						fs.mkdirSync(path);
-						fs.writeFileSync(path+'clientData.json',clientDataString);
-					} else {
-						fs.writeFileSync(path+'clientData.json',clientDataString);
-					}
+					// Update the saved tokens
+					store.set('accessToken', data.body['access_token']);
+					store.set('refreshToken', refreshToken);
 				},
 				function(err) {
 					debug && console.log('Could not refresh access token', err);
@@ -556,17 +467,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	$('#configConfirm').click(function() {
 		debug && console.log('Removing configuration files.')
 
-		var clientSecretPath = 'C:\\ProgramData\\spot-thing\\clientSecrets.json';
-		fs.unlink(clientSecretPath, function(err){
-			if (err) return console.log(err);
-			debug && console.log('clientSecrets.json was deleted successfully.');
-	   	});
-
-		var clientDataPath = 'C:\\ProgramData\\spot-thing\\clientData.json';
-		fs.unlink(clientDataPath, function(err){
-			if (err) return console.log(err);
-			debug && console.log('clientData.json was deleted successfully.');
-	   	});
+		store.clear();
 
 		location.reload();
 	});

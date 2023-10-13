@@ -1,12 +1,20 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path')
 const ipc = require("electron").ipcMain;
+const Store = require('electron-store');
+
+const store = new Store();
+
+// Set to 1 to turn on console logging
+var debug = 0;
+
+let mainWindow;
 
 function createWindow () {
   	// Create the browser window.
-  	const mainWindow = new BrowserWindow({
-		width: 500,
+  	mainWindow = new BrowserWindow({
+		width: 530,
 		height: 275,
 		resizeable: false,
 		autoHideMenuBar: true,
@@ -21,7 +29,7 @@ function createWindow () {
   	// and load the index.html of the app.
   	mainWindow.loadFile('spot-thing.html')
 
-  	// Open the DevTools.
+  	// Open the dev tools of the main window -- COMMENT OUT BEFORE BUILD
   	//mainWindow.webContents.openDevTools()
   
 	// Don't allow drag to resize window
@@ -58,3 +66,60 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// Function to create child window of parent one
+function createAuthWindow(authorizeURL) {
+	var authWindowURL;
+
+	authWindow = new BrowserWindow({
+		width: 1000,
+		height: 700,
+		modal: true,
+		show: false,
+		parent: mainWindow,
+		autoHideMenuBar: false,
+		frame: true,
+		// Make sure to add webPreferences with below configuration
+		webPreferences: {
+			nodeIntegration: true,
+			contextIsolation: false,
+			enableRemoteModule: true
+		},
+	});
+
+	// Open the dev tools of the auth window -- COMMENT OUT BEFORE BUILD
+	//authWindow.webContents.openDevTools()
+	
+	// Child window loads settings.html file
+	authWindow.loadURL(authorizeURL);
+	
+	authWindow.once("ready-to-show", () => {
+		authWindow.show();
+		authWindowURL = authWindow.webContents.getURL();
+
+		if (authWindowURL.includes('localhost')) {
+			// We are authenticated, store the url
+			store.set('authWindowURL', authWindowURL);
+			debug && console.log('authWindowURL From Store: ' + store.get('authWindowURL'));
+
+			authWindow.close();
+		}
+	});
+
+	authWindow.webContents.on('did-navigate', function() {
+		authWindowURL = authWindow.webContents.getURL();
+
+		if (authWindowURL.includes('localhost')) {
+			// We are authenticated, store the url
+			store.set('authWindowURL', authWindowURL);
+			debug && console.log('authWindowURL From Store: ' + store.get('authWindowURL'));
+
+			authWindow.close();
+		}
+	});
+}
+
+// Listen for the createAuthWindow call from preload.js to spawn our new electron window for authorization
+ipcMain.on("createAuthWindow", (event, arg) => {
+	createAuthWindow(arg[0]);
+});

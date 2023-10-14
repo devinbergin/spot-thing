@@ -467,8 +467,10 @@ window.addEventListener('DOMContentLoaded', () => {
 	$('#configConfirm').click(function() {
 		debug && console.log('Removing configuration files.')
 
+		// Clears out the config.json file of all values
 		store.clear();
 
+		// Reload the app
 		location.reload();
 	});
 

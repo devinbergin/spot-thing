@@ -79,46 +79,62 @@ Want to support me and spot-thing? [Buy Me A Coffee](https://www.buymeacoffee.co
 ## For Users
 **spot-thing is free to use! You can download the latest version [here](https://github.com/devinbergin/spot-thing/releases/latest).**
 
-After downloading the .exe file, place it somewhere you can access in the future, this is how you'll open spot-thing (or you can make a shortcut). Then follow the steps below.
+After downloading the .exe file, place it somewhere you can access in the future, this is how you'll open spot-thing (or you can make a shortcut). Then follow the steps below. Note - If you used a previous version of spot-thing (pre v1.1) you will need to reenter your clientID and clientSecret upon downloading v1.1 or higher.
 
 ### Getting Setup
 
-To use spot-thing version 1, you need to setup your spotify developer account with a customer app. This will allow spot-thing to read information from your Spotify account.
+To use spot-thing, you need to setup your spotify developer account with a custom app. This will allow spot-thing to read information from your Spotify account such as now playing tracks.
 
 1. Visit the Spotify Developer Dashboard below and login - [Spotfy Developer Dashboard](https://developer.spotify.com/dashboard/)
-2. After logging in click the Create An App button in the top right corner
+
+2. After logging in click the Create app button in the top right corner
+
 <p align="center">
   <img height="400" src="setup/user-setup-1.png">
 </p>
-3. In the window that opens, fill in the App Name (spot-thing) and App Description (something you choose) and click Create.
+
+3. In the window that opens, fill in the App Name (spot-thing) and App Description (something you choose). You can place the github URL in the website box if you'd like, but it isn't required. Lastly in the Redirect URI box copy the following URL. Click Save once you're finished.
+
+```sh
+http://localhost:8888/callback
+```
+
 <p align="center">
   <img height="400" src="setup/user-setup-2.png">
 </p>
-4. The next page is the main area for your new app! Click the Edit Settings button in the upper right.
+
+4. The next page is the dashboard for your new app! Click the Settings button in the upper right.
+
 <p align="center">
   <img height="400" src="setup/user-setup-3.png">
 </p>
-5. Scroll down to where it says URI Redirects and copy and paste the following URL into the box. MAKE SURE TO CLICK ADD TO THE RIGHT OF THE FIELD. Then click save at the bottom. http://localhost:8888/callback
+
+5. Here you will find your clientID and clientSecret values. Click view client secret to see both values. You will need to copy and paste these into spot-thing in the next step.
+
 <p align="center">
-  <img height="400" src="setup/user-setup-4.png">
+  <img height="300" src="setup/user-setup-4.png">
 </p>
-6. Now return to the main dashboard for your new app. In the upper left click to SHOW CLIENT SECRET and copy the Client ID and Client Secret. You will need these when you first open spot-thing. You shouldn't need them again as spot-thing will save them for you, but you can always access them in this dashboard in the future. 
-<p align="center">
-  <img height="300" src="setup/user-setup-5.png">
-</p>
+
 7. Now open spot-thing! 
+
 8. You'll be prompted to enter your Client ID and Client Secret, then click Next. 
+
 <p align="center">
-  <img height="250" src="setup/user-setup-6.png">
+  <img height="250" src="setup/user-setup-5.png">
 </p>
-9. When you click next, spot-thing will attempt to automatically open an authorization URL for you in your browser. This page is where you accept the permissions that spot-thing needs to read and control your playback details.
+
+9. When you click next, spot-thing will attempt to automatically open an authorization URL for you in another window. This page is where you accept the permissions that spot-thing needs to read and control your playback details.
+
 <p align="center">
-  <img height="500" src="setup/user-setup-7.png">
+  <img height="500" src="setup/user-setup-6.png">
 </p>
-10. After you click AGREE, you will be redirected to a blank page with a URL that begins with "http://localhost:8888/callback?code=" followed by a very long string. Copy the ENTIRE URL and paste it into spot-thing and click activate.
+
+10. After you click AGREE, spot-thing will receive authorization details from spotify and begin attempting to connect.
+
 <p align="center">
-  <img height="250" src="setup/user-setup-8.png">
+  <img height="250" src="setup/user-setup-7.png">
 </p>
+
 11. You're done! If you have music currently playing on your spotify account you'll see spot-thing snap into action. If you don't have anything playing, you'll see a message from spot-thing to begin playing music on your main spotify app. spot-thing automatically stays connected to your account so you can close/open it as you need and you won't have to enter those details again. If for some reason it prompts you for the ID and Secret, just follow steps 8-11 again. 
 
 <!-- GETTING STARTED -->

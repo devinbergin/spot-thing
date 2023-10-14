@@ -29,8 +29,8 @@ function createWindow () {
   	// and load the index.html of the app.
   	mainWindow.loadFile('spot-thing.html')
 
-  	// Open the dev tools of the main window -- COMMENT OUT BEFORE BUILD
-  	//mainWindow.webContents.openDevTools()
+  	// Open the dev tools of the main window in debug mode
+  	debug && mainWindow.webContents.openDevTools()
   
 	// Don't allow drag to resize window
   	//mainWindow.setResizable(false)
@@ -87,17 +87,18 @@ function createAuthWindow(authorizeURL) {
 		},
 	});
 
-	// Open the dev tools of the auth window -- COMMENT OUT BEFORE BUILD
-	//authWindow.webContents.openDevTools()
+	// Open the dev tools of the auth window in debug mode
+	debug && authWindow.webContents.openDevTools()
 	
 	// Child window loads settings.html file
 	authWindow.loadURL(authorizeURL);
 	
+	// This one should cover any future authorizations of the same app
 	authWindow.once("ready-to-show", () => {
 		authWindow.show();
 		authWindowURL = authWindow.webContents.getURL();
 
-		if (authWindowURL.includes('localhost')) {
+		if (authWindowURL.includes('localhost') && !authWindowURL.includes('https://accounts.spotify.com')) {
 			// We are authenticated, store the url
 			store.set('authWindowURL', authWindowURL);
 			debug && console.log('authWindowURL From Store: ' + store.get('authWindowURL'));
@@ -106,10 +107,11 @@ function createAuthWindow(authorizeURL) {
 		}
 	});
 
-	authWindow.webContents.on('did-navigate', function() {
+	// This helps to cover the first authorization with Spotify
+	authWindow.webContents.on('did-finish-load', function() {
 		authWindowURL = authWindow.webContents.getURL();
 
-		if (authWindowURL.includes('localhost')) {
+		if (authWindowURL.includes('localhost') && !authWindowURL.includes('https://accounts.spotify.com')) {
 			// We are authenticated, store the url
 			store.set('authWindowURL', authWindowURL);
 			debug && console.log('authWindowURL From Store: ' + store.get('authWindowURL'));

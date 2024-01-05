@@ -7,7 +7,8 @@ const Store = require('electron-store');
 const store = new Store();
 
 // Set to 1 to turn on console logging
-var debug = 0;
+store.set('debug', 0);
+var debug = store.get('debug');
 
 let mainWindow;
 

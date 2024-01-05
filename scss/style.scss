@@ -127,10 +127,10 @@
 
 	.overlay {
 		position:absolute;
-		top:10%;
-		left:5%;
-		height:80%;
-		width: 90%;
+		top: 7%;
+		left: 2%;
+		height: 85%;
+		width: 95%;
 		background-color:$black;
 		border-radius:10px;
 		z-index: 10;
@@ -270,6 +270,23 @@
 		font-size:28px;
 		color:$white;
 
+		.saveSong {
+			opacity:.7;
+
+			&:hover {
+				opacity:1;
+			}
+
+			&.saved {
+				color: $red;
+				opacity: 1;
+
+				&:hover {
+					opacity:.7;
+				}
+			}
+		}
+
 		.nextSong {
 			opacity:.7;
 
@@ -299,6 +316,27 @@
 				opacity:1;
 			}
 		}
+
+		.repeat-track {
+			color: $spotifygreen;
+			font-size: 12px;
+			font-weight: 600;
+			padding-left: 3px;
+		}
+
+		.repeatActive {
+			opacity:1;
+			color:$spotifygreen;
+		}
+
+		.repeatInactive {
+			opacity:.7;
+			color:$white;
+
+			&:hover {
+				opacity:1;
+			}
+		}
 	}
 
 	.controlsAlt {
@@ -318,7 +356,35 @@
 			border-radius:10px;
 		}
 	}
+
+	.explore {
+
+		.explore-header {
+			color: $white;
+		}
+
+		.close-explore {
+			cursor: pointer;
+			color: $gray;
+		}
+
+		.explore-row {
+			overflow: auto;
+			white-space: nowrap;
+			padding-bottom: 10px;
+
+			.albumContainer {
+				max-width:35%;
+				display:inline-block;
+	
+				.albumArt {
+					box-shadow: 0 1px 5px 0 rgba($black, .6), 0 1px 4px -1px rgba($black, .6);
+					cursor:pointer;
+					height: 135px;
+					margin-right:10px;
+				}
+			}
+		}
+
+	}
 }
-
-
-

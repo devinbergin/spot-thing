@@ -22,10 +22,11 @@
 						<span data-toggle="dropdown"><img class="title-logo" src="images/logo.png"> spot-thing</span>
 
 						<div class="dropdown-menu" aria-labelledby="menu">
-							<a class="dropdown-item" id="aboutLink">About</a>
+							<a class="dropdown-item d-none" id="exploreLink">Explore Trending Playlists</a>
+							<a class="dropdown-item d-none" id="searchLink">Search</a>
 							<a class="dropdown-item" id="resetConfig">Reset spot-thing</a>
 						  	<a class="dropdown-item" id="bugLink">Report bug</a>
-						  	<a class="dropdown-item" id="tipLink">Buy me a coffee</a>
+							<a class="dropdown-item" id="aboutLink">About</a>
 						</div>
 					</div>
 				</div>
@@ -37,11 +38,10 @@
 					<div class="button close-button" id="close-button">
 						<i class="fa-solid fa-xmark"></i>
 					</div>
-			  
-				  </div>
+				</div>
 			</div>
-
 		</header>
+
 		<div class="container-fluid h-100 pt-3">
 			<div class="mb-3 h-100 pt-2">
 				<div class="row info">
@@ -75,17 +75,23 @@
 					</div>
 				</div>
 				<div class="row controls">
-					<div class="col-3 my-auto" align="center">
+					<div class="col-2 my-auto" align="center">
 						<i class="fa-solid fa-shuffle shuffleInactive" id="shuffle"></i>
 					</div>
-					<div class="col-3 my-auto" align="center">
+					<div class="col-2 my-auto" align="center">
 						<i class="fa-solid fa-backward-step backSong" id="backSong"></i>
 					</div>
-					<div class="col-3 my-auto" align="center" id="playPause">
+					<div class="col-2 my-auto" align="center" id="playPause">
 						<i class="fa-solid fa-pause" id="pause"></i>
 					</div>
-					<div class="col-3 my-auto" align="center">
+					<div class="col-2 my-auto" align="center">
 						<i class="fa-solid fa-forward-step nextSong" id="nextSong"></i>
+					</div>
+					<div class="col-2 my-auto" align="center">
+						<i class="fa-regular fa-heart saveSong" id="saveSong"></i>
+					</div>
+					<div class="col-2 my-auto" align="center">
+						<i class="fa-solid fa-repeat repeatSong" id="repeatSong"><span class="repeat-track">1</span></i>
 					</div>
 				</div>
 			</div>
@@ -151,8 +157,8 @@
 				</div>
 			</div>
 
-			<!-- Nothing Playing Overlay -->
-			<div id="nothingPlaying" class="overlay" style="display:none;">
+			<!-- Nothing Playing -->
+			<div id="nothingPlaying" class="overlay explore" style="display:none;">
 				<div class="row mt-3" align="center">
 					<div class="col-12 about mt-2">
 						Nothing is currently playing. Start playing music from your main Spotify player.
@@ -162,6 +168,51 @@
 				<div class="row mt-4 mx-auto">
 					<div class="col-12" align="center">
 						<button id="nothingPlayingBtn" type="button" class="btn btn-primary">Open Main Player</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Explore Page -->
+			<div id="explorePlaylists" class="overlay explore" style="display:none;">
+				<div class="row">
+					<div class="explore-header col-11">
+						Explore Trending Playlists
+					</div>
+					<div class="button close-button close-explore col-1" id="close-explore">
+						<i class="fa-solid fa-xmark"></i>
+					</div>
+				</div>
+				<div class="explore-row mt-1" align="center">
+					<div class="p-2 my-auto albumContainer" id="explorePlaylist_0">
+						<img class="albumArt" alt="">
+					</div>
+
+					<div class="p-2 my-auto albumContainer" id="explorePlaylist_1">
+						<img class="albumArt" alt="">
+					</div>
+
+					<div class="p-2 my-auto albumContainer" id="explorePlaylist_2">
+						<img class="albumArt" alt="">
+					</div>
+
+					<div class="p-2 my-auto albumContainer" id="explorePlaylist_3">
+						<img class="albumArt" alt="">
+					</div>
+
+					<div class="p-2 my-auto albumContainer" id="explorePlaylist_4">
+						<img class="albumArt" alt="">
+					</div>
+
+					<div class="p-2 my-auto albumContainer" id="explorePlaylist_5">
+						<img class="albumArt" alt="">
+					</div>
+
+					<div class="p-2 my-auto albumContainer" id="explorePlaylist_6">
+						<img class="albumArt" alt="">
+					</div>
+
+					<div class="p-2 my-auto albumContainer" id="explorePlaylist_7">
+						<img class="albumArt" alt="">
 					</div>
 				</div>
 			</div>

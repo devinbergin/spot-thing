@@ -1,7 +1,8 @@
 window.addEventListener('DOMContentLoaded', () => {
-  	
-	// Set to 1 to turn on console logging
-	var debug = 0;
+	// For storing client data
+	const Store = require('electron-store');
+	const store = new Store();
+	var debug = store.get('debug');
 
 	const ipc = window.require('electron').ipcRenderer;
 
@@ -11,10 +12,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// Spotify api
 	const SpotifyWebApi = require('spotify-web-api-node');
-
-	// For storing client data
-	const Store = require('electron-store');
-	const store = new Store();
 
 	// Open for sending URL to default browser
 	const open = require('open');
@@ -84,7 +81,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		$('#loading').show();
 	};
 
-	// First form
+	// First registration form
 	$("#idSecretNext").click(function() {		
 		// Check if the fields are filled out
 		if ($('#idSecretForm')[0].checkValidity() == false) {
@@ -105,7 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			store.set('clientSecret', clientSecret);
 			store.set('redirectURI', redirectURI);
 
-			var scopes = ['user-read-currently-playing','user-read-playback-position','user-modify-playback-state','user-read-playback-state'],
+			var scopes = ['user-read-currently-playing','user-read-playback-position','user-modify-playback-state','user-read-playback-state','user-library-read','user-library-modify'],
 				redirectUri = redirectURI,
 				clientId = clientID,
 				clientSecret = clientSecret,
@@ -214,8 +211,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 						// Hide the loading overlay
 						$('#loading').hide();
-
-						// Nothing is playing so restart the loop from the top until it is
 						$('#nothingPlaying').show();
 						return;
 					}
@@ -236,6 +231,10 @@ window.addEventListener('DOMContentLoaded', () => {
 					debug && console.log('Song URL: ' + data.body.item.external_urls.spotify);
 					debug && console.log('Is Playing (t/f): ' + data.body.is_playing);
 					debug && console.log('Shuffle State (t/f): ' + data.body.shuffle_state);
+					debug && console.log('Repeat State (track/context/off): ' + data.body.repeat_state);
+
+					// Store some now playing info for use elsewhere
+					store.set('trackID', data.body.item.id);
 
 					// Get album artwork color
 					var url = data.body.item.album.images[0].url;
@@ -289,10 +288,15 @@ window.addEventListener('DOMContentLoaded', () => {
 					$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
 					$('#songURL').val(data.body.item.external_urls.spotify);
 					$('#artistURL').val(data.body.item.artists[0].external_urls.spotify);
+					
 					var playing = data.body.is_playing;
 					var shuffle = data.body.shuffle_state;
+					var repeat_state = data.body.repeat_state;
+
 					playing = playing.toString();
 					shuffle = shuffle.toString();
+					repeat_state = repeat_state.toString();
+					store.set('repeat_state', repeat_state);
 
 					// Set play/pause icon
 					if (playing == 'true') {
@@ -310,6 +314,39 @@ window.addEventListener('DOMContentLoaded', () => {
 						$('#shuffle').addClass('shuffleInactive');
 					}
 
+					// Set the repeat toggle
+					if (repeat_state == 'track') {
+						$('#repeatSong').addClass('repeatActive');
+						$('#repeatSong').removeClass('repeatInactive');
+						$('.repeat-track').show();
+					} else if (repeat_state == 'context') {
+						$('#repeatSong').addClass('repeatActive');
+						$('#repeatSong').removeClass('repeatInactive');
+						$('.repeat-track').hide();
+					} else {
+						$('#repeatSong').removeClass('repeatActive');
+						$('#repeatSong').addClass('repeatInactive');
+						$('.repeat-track').hide();
+					}
+
+					// Check if the current track is saved to their library
+					spotifyApi.containsMySavedTracks([data.body.item.id]).then(function(data) {
+						// An array is returned, where the first element corresponds to the first track ID in the query
+						var trackSaved = data.body[0];
+						if (trackSaved) {
+							$('#saveSong').addClass('saved');
+							$('#saveSong').removeClass('fa-regular').addClass('fa-solid');
+
+							debug && console.log('Track was found in the users Your Music library.');
+						} else {
+							$('#saveSong').removeClass('saved');
+							$('#saveSong').addClass('fa-regular').removeClass('fa-solid');
+
+							debug && console.log('Track was not found in the users Your Music library.');
+						}
+					}, function(err) {
+						debug && console.log('Something went wrong in containsMySavedTracks!', err);
+					});
 				}, function(err) {
 					debug && console.log('Something went wrong!', err);
 			});
@@ -409,6 +446,71 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
+	$("#saveSong").click(function() {
+		var trackID = store.get('trackID');
+
+		spotifyApi.containsMySavedTracks([trackID]).then(function(data) {
+			// An array is returned, where the first element corresponds to the first track ID in the query
+			var trackSaved = data.body[0];
+			if (trackSaved) {
+				// The track is already saved so remove it from their saved library
+				spotifyApi.removeFromMySavedTracks([trackID]);
+
+				// Display it as removed now
+				$('#saveSong').removeClass('saved');
+				$('#saveSong').addClass('fa-regular').removeClass('fa-solid');
+
+				debug && console.log('Track was removed from the users library.');
+			} else {
+				// The track is not in their saved library so add it
+				spotifyApi.addToMySavedTracks([trackID]);
+
+				// Display it as saved now
+				$('#saveSong').addClass('saved');
+				$('#saveSong').removeClass('fa-regular').addClass('fa-solid');
+
+				debug && console.log('Track was added to the users library');
+			}
+		})
+		.catch(function(err) {
+			debug && console.log('Something went wrong in #saveSong!', err);
+		});
+	});
+
+	// Repeat track/playlist button
+	$("#repeatSong").click(function() {
+		var repeat_state = store.get('repeat_state');
+		var repeat_key;
+
+		if (repeat_state == 'off') {
+			// Set it to context
+			repeat_key = 'context'
+			$('#repeatSong').addClass('repeatActive');
+			$('#repeatSong').removeClass('repeatInactive');
+			$('.repeat-track').hide();
+		} else if (repeat_state == 'context') {
+			// Set it to track
+			repeat_key = 'track';
+			$('#repeatSong').addClass('repeatActive');
+			$('#repeatSong').removeClass('repeatInactive');
+			$('.repeat-track').show();
+		} else {
+			// Set it to off
+			repeat_key = 'off';
+			$('#repeatSong').removeClass('repeatActive');
+			$('#repeatSong').addClass('repeatInactive');
+			$('.repeat-track').hide();
+		}
+
+		spotifyApi.setRepeat(repeat_key).then(function () {
+			console.log('Set repeat_state to: ' + repeat_key);
+		}, function(err) {
+			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			console.log('Something went wrong!', err);
+		});
+	});
+	
+
 	// Open Song in browser window
 	$('#songName').click(function() {
 		var songURL = $('#songURL').val();
@@ -472,6 +574,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		// Reload the app
 		location.reload();
+	});
+
+	// Open the explore overlay
+	$('#exploreLink').click(function() {
+		spotifyApi.getFeaturedPlaylists({ limit : 8, offset: 0, country: 'US', locale: 'en_US'})
+		.then(function(data) {
+			for (var x=0; x < data.body.playlists.items.length; x++) {
+				$('#explorePlaylist_' + x + ' img').attr('src',data.body.playlists.items[x].images[0].url);
+			}
+
+			debug && console.log('getFeaturedPlaylists: ' + JSON.stringify(data.body));
+		}, function(err) {
+			debug && console.log("Something went wrong in getFeaturedPlaylists!", err);
+		});
+
+		$('#explorePlaylists').show();
+	});
+
+	// Close explore trending playlists overlay
+	$("#close-explore").click(function() {
+		$('#explorePlaylists').hide();
 	});
 
 	// Bounce them to the main player on the web

@@ -503,10 +503,10 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 
 		spotifyApi.setRepeat(repeat_key).then(function () {
-			console.log('Set repeat_state to: ' + repeat_key);
+			debug && console.log('Set repeat_state to: ' + repeat_key);
 		}, function(err) {
 			//if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
-			console.log('Something went wrong!', err);
+			debug && console.log('Something went wrong!', err);
 		});
 	});
 	

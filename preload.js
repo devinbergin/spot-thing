@@ -2,6 +2,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	// For storing client data
 	const Store = require('electron-store');
 	const store = new Store();
+
+	const ipcRenderer = require('electron').ipcRenderer;
+
 	var debug = store.get('debug');
 
 	const ipc = window.require('electron').ipcRenderer;
@@ -615,6 +618,85 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Close the app
 	$('#close-button').click(function() {
 		window.close();
+	});
+
+	ipcRenderer.on('play-pause-song', () => {
+		var playing = $("#pause").length;
+
+		if (playing > 0) {
+			// Pause the User's Playback 
+			spotifyApi.pause()
+			.then(function() {
+				debug && console.log('Playback paused');
+				$('#playPause').html('<i class="fa-solid fa-play" id="play"></i>');
+			}, function(err) {
+				// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+				debug && console.log('Something went wrong!', err);
+			});
+		} else {
+			// Start/Resume a User's Playback 
+			spotifyApi.play()
+			.then(function() {
+				debug && console.log('Playback started');
+				$('#playPause').html('<i class="fa-solid fa-pause" id="pause"></i>');
+			}, function(err) {
+				// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+				debug && console.log('Something went wrong!', err);
+			});
+		}
+	});
+
+	ipcRenderer.on('previous-song', () => {
+		// Skip User’s Playback To Previous Track 
+		spotifyApi.skipToPrevious()
+		.then(function() {
+			debug && console.log('Skip to previous');
+		}, function(err) {
+			// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			debug && console.log('Something went wrong!', err);
+		});
+	});
+
+	ipcRenderer.on('next-song', () => {
+		// Trigger the function to skip a song here
+		spotifyApi.skipToNext()
+		.then(function() {
+			debug && console.log('Skip to next');
+		}, function(err) {
+			// TODO - handle gracefully - if the user making the request is non-premium, a 403 FORBIDDEN response code will be returned
+			debug && console.log('Something went wrong!', err);
+		});
+	});
+
+	ipcRenderer.on('save-song', () => {
+		var trackID = store.get('trackID');
+
+		spotifyApi.containsMySavedTracks([trackID]).then(function(data) {
+			// An array is returned, where the first element corresponds to the first track ID in the query
+			var trackSaved = data.body[0];
+			if (trackSaved) {
+				// The track is already saved so remove it from their saved library
+				spotifyApi.removeFromMySavedTracks([trackID]);
+
+				// Display it as removed now
+				$('#saveSong').removeClass('saved');
+				$('#saveSong').addClass('fa-regular').removeClass('fa-solid');
+
+				debug && console.log('Track was removed from the users library.');
+			} else {
+				// The track is not in their saved library so add it
+				spotifyApi.addToMySavedTracks([trackID]);
+
+				// Display it as saved now
+				$('#saveSong').addClass('saved');
+				$('#saveSong').removeClass('fa-regular').addClass('fa-solid');
+
+				debug && console.log('Track was added to the users library');
+			}
+		})
+		.catch(function(err) {
+			debug && console.log('Something went wrong in #saveSong!', err);
+		});
 	});
   
 });

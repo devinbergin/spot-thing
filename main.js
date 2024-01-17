@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain} = require('electron')
+const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
 const path = require('path')
 const ipc = require("electron").ipcMain;
 const Store = require('electron-store');
@@ -56,6 +56,22 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+	globalShortcut.register('Alt+CommandOrControl+Shift+Space', () => {
+		mainWindow.webContents.send('play-pause-song');
+	});
+
+	globalShortcut.register('Alt+CommandOrControl+Shift+P', () => {
+		mainWindow.webContents.send('previous-song');
+	});
+
+	globalShortcut.register('Alt+CommandOrControl+Shift+N', () => {
+		mainWindow.webContents.send('next-song');
+	});
+
+	globalShortcut.register('Alt+CommandOrControl+Shift+S', () => {
+		mainWindow.webContents.send('save-song');
+	});
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

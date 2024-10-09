@@ -208,3 +208,6 @@ npm run build-css
 ```sh
 npm run dist
 ```
+
+### spotify-web-api-node
+It doesn't appear that this natively supports getting podcast episode information in `getMyCurrentPlayingTrack` so I updated it to include the querystring `?additional_types=episode` in the request URL on line 1011 of `spotify-web-api.js` and now podcasts work. 

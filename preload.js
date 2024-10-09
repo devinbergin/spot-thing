@@ -202,6 +202,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			spotifyApi.getMyCurrentPlaybackState()
 				.then(function(data) {
 					// Full API Response
+					let trackType = "music";
 					var currentlyPlaying = JSON.stringify(data.body);
 					debug && console.log('currentlyPlaying: ' + currentlyPlaying);
 					debug && console.log('currentlyPlaying.length: ' + currentlyPlaying.length);
@@ -220,15 +221,30 @@ window.addEventListener('DOMContentLoaded', () => {
 
 					// Hide the loading overlay
 					$('#loading').hide();
+
+					// Switch between podcast and music
+					if (data.body.currently_playing_type == "episode") {
+						trackType = "podcast";
+					}
 					
+					debug && console.log("Now playing trackType: " + trackType)
 					debug && console.log('Now playing track: ' + data.body.item.name);
-					debug && console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
-					debug && console.log('Now playing album: ' + data.body.item.album.name);
-					debug && console.log('Now playing image: ' + data.body.item.album.images[0].url);
+
+					if (trackType == "podcast") {
+						debug && console.log('Now playing podcast name: ' + data.body.item.show.name);
+						debug && console.log('Now playing image: ' + data.body.item.show.images[0].url);
+						debug && console.log('Show URL: ' + data.body.item.show.external_urls.spotify);
+						debug && console.log('Episode URL: ' + data.body.item.external_urls.spotify);
+					} else {
+						debug && console.log('Now playing artist[0]: ' + data.body.item.artists[0].name);
+						debug && console.log('Now playing album: ' + data.body.item.album.name);
+						debug && console.log('Now playing image: ' + data.body.item.album.images[0].url);
+						debug && console.log('Artist URL: ' + data.body.item.artists[0].external_urls.spotify);
+						debug && console.log('Song URL: ' + data.body.item.external_urls.spotify);
+					}
+
 					debug && console.log('Now playing song progress ms: ' + data.body.progress_ms);
 					debug && console.log('Now playing song duration ms: ' + data.body.item.duration_ms);
-					debug && console.log('Artist URL: ' + data.body.item.artists[0].external_urls.spotify);
-					debug && console.log('Song URL: ' + data.body.item.external_urls.spotify);
 					debug && console.log('Is Playing (t/f): ' + data.body.is_playing);
 					debug && console.log('Shuffle State (t/f): ' + data.body.shuffle_state);
 					debug && console.log('Repeat State (track/context/off): ' + data.body.repeat_state);
@@ -237,7 +253,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					store.set('trackID', data.body.item.id);
 
 					// Get album artwork color
-					var url = data.body.item.album.images[0].url;
+					var url = (trackType == "podcast") ? data.body.item.show.images[0].url : data.body.item.album.images[0].url;
 					request({ url, encoding: null }, (err, resp, buffer) => {
 						color.getAverageColor(buffer).then(color => {
 							debug && console.log('Album Color: '+color.hex);
@@ -279,15 +295,27 @@ window.addEventListener('DOMContentLoaded', () => {
 					// Set all the info of the currently playing track
 					$('#songName').text(data.body.item.name);
 					$('#songName').attr('title',data.body.item.name);
-					$('#artistName').text(data.body.item.artists[0].name);
-					$('#artistName').attr('title',data.body.item.artists[0].name);
-					$('#albumName').text(data.body.item.album.name);
-					$('#albumName').attr('title',data.body.item.album.name);
-					$('#albumArt').attr('src',data.body.item.album.images[0].url);
-					$('#albumURL').val(data.body.item.album.external_urls.spotify);
-					$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
 					$('#songURL').val(data.body.item.external_urls.spotify);
-					$('#artistURL').val(data.body.item.artists[0].external_urls.spotify);
+
+					if (trackType == "podcast") {
+						$('#artistName').text(data.body.item.show.name);
+						$('#artistName').attr('title',data.body.item.show.name);
+						$('#albumName').text("");
+						$('#albumName').attr('title',"");
+						$('#albumArt').attr('src',data.body.item.show.images[0].url);
+						$('#albumURL').val(data.body.item.show.external_urls.spotify);
+						$('#artistURL').val(data.body.item.show.external_urls.spotify);
+					} else {
+						$('#artistName').text(data.body.item.artists[0].name);
+						$('#artistName').attr('title',data.body.item.artists[0].name);
+						$('#albumName').text(data.body.item.album.name);
+						$('#albumName').attr('title',data.body.item.album.name);
+						$('#albumArt').attr('src',data.body.item.album.images[0].url);
+						$('#albumURL').val(data.body.item.album.external_urls.spotify);
+						$('#artistURL').val(data.body.item.artists[0].external_urls.spotify);
+					}
+
+					$('.progress-bar').css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
 					
 					var playing = data.body.is_playing;
 					var shuffle = data.body.shuffle_state;
